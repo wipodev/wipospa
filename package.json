@@ -1,0 +1,12 @@
+{
+  "name": "mativelle",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "servor --reload"
+  },
+  "type": "module",
+  "devDependencies": {
+    "servor": "^4.0.2"
+  }
+}
