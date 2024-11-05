@@ -1,12 +1,28 @@
 {
-  "name": "mativelle",
+  "name": "winify",
   "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "dev": "servor --reload"
+  "description": "",
+  "main": "bin/Cli.js",
+  "bin": {
+    "winify": "./bin/Cli.js"
   },
   "type": "module",
+  "scripts": {
+    "dev": "node bin/Cli.js -m dev"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "lib/",
+    "scripts/"
+  ],
+  "author": "wipodev",
+  "license": "MIT",
   "devDependencies": {
+    "cheerio": "^1.0.0",
     "servor": "^4.0.2"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
   }
 }
