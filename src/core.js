@@ -17,29 +17,48 @@ const evaluateScripts = (html) => {
   return tempDiv.innerHTML.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "");
 };
 
+const evaluateCustomHead = (html) => {
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = html;
+  const customHead = tempDiv.querySelector("wiview\\:head");
+
+  if (customHead) {
+    Array.from(customHead.children).forEach((element) => {
+      document.head.appendChild(element.cloneNode(true));
+    });
+    customHead.remove();
+  }
+
+  return tempDiv.innerHTML;
+};
+
+const render = async (selector, content, replaceContent = true) => {
+  const container = document.querySelector(selector);
+
+  if (container) {
+    container.innerHTML = replaceContent ? content : container.innerHTML + content;
+  } else {
+    console.warn(`Selector not found: ${selector}`);
+    document.body.innerHTML = replaceContent ? content : container.innerHTML + content;
+  }
+};
+
 export const loadComponent = async (options = {}) => {
   const { component, selector, initFunction = null, replaceContent = true, fetchOptions = {} } = options;
 
   try {
     const response = await fetch(component, fetchOptions);
-    if (!response.ok) {
-      throw new Error(`Failed to load component: ${component}`);
-    }
+
+    if (!response.ok) throw new Error(`Failed to load component: ${component}`);
+
     let content = await response.text();
     content = evaluateScripts(content);
-    const container = document.querySelector(selector);
+    content = evaluateCustomHead(content);
 
-    if (container) {
-      container.innerHTML = replaceContent ? content : container.innerHTML + content;
-      if (initFunction) {
-        await initFunction();
-      }
-    } else {
-      console.warn(`Selector not found: ${selector}`);
-      document.querySelector("body").innerHTML = replaceContent ? content : container.innerHTML + content;
-      if (initFunction) {
-        await initFunction();
-      }
+    await render(selector, content, replaceContent);
+
+    if (initFunction) {
+      await initFunction();
     }
   } catch (error) {
     console.error(error);
@@ -56,20 +75,29 @@ export const Router = (options) => {
 
   const handleRoute = () => {
     const path = window.location.pathname;
-    const route = routes ? routes[path] : null;
 
-    if (route) {
-      loadComponent({
-        component: route.component,
-        selector,
-        replaceContent: true,
-        initFunction: route.initFunction,
-      });
+    if (routes) {
+      const route = routes[path];
+      if (route) {
+        loadComponent({
+          component: route.component,
+          selector,
+          replaceContent: true,
+          initFunction: route.initFunction,
+        });
+        return;
+      } else {
+        navigateTo("/");
+      }
     } else {
-      document.querySelector(selector).innerHTML = `
-      <h1>404 Not Found</h1>
-      <p>The page you're looking for does not exist.</p>
-    `;
+      render(
+        selector,
+        `
+        <h1>configuration</h1>
+        <p>There are no routes defined for this page, please set the paths in "/lib/wiview.config.js"</p>
+        `,
+        true
+      );
     }
   };
 
