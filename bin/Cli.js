@@ -3,25 +3,30 @@
 import { program } from "commander";
 import { getVersion } from "../lib/utils.js";
 
+program.version("v" + getVersion(), "-v, --version", "Show version").helpCommand();
+
 program
-  .option("-m, --mode <mode>", "Execution mode (build or dev)", "build")
-  .version("v" + getVersion(), "-v, --version", "Show version")
-  .helpCommand()
-  .parse(process.argv);
+  .command("init")
+  .description("Initialize the project")
+  .action(async () => {
+    const runtime = await import("../scripts/init.js");
+    runtime.init();
+  });
 
-const options = program.opts();
+program
+  .command("dev")
+  .description("Run development mode")
+  .action(async () => {
+    const runtime = await import("../scripts/dev.js");
+    runtime.modeDev();
+  });
 
-if (options.helpCommand) {
-  program.outputHelp();
-  process.exit(0);
-}
+program
+  .command("build")
+  .description("Run build mode")
+  .action(async () => {
+    const runtime = await import("../scripts/build.js");
+    runtime.modeBuild();
+  });
 
-const mode = options.mode;
-
-if (mode === "dev") {
-  const runtime = await import("../scripts/dev.js");
-  runtime.modeDev();
-} else if (mode === "build") {
-  const runtime = await import("../scripts/build.js");
-  runtime.default();
-}
+program.parse(process.argv);

@@ -1,10 +1,10 @@
 {
-  "name": "winify",
-  "version": "0.0.1",
+  "name": "wiview",
+  "version": "0.1.0",
   "description": "",
   "main": "bin/Cli.js",
   "bin": {
-    "winify": "./bin/Cli.js"
+    "wiview": "./bin/Cli.js"
   },
   "type": "module",
   "scripts": {
