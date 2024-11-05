@@ -8,22 +8,24 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "node bin/Cli.js -m dev"
+    "dev": "node bin/Cli.js dev"
   },
   "files": [
     "bin/",
     "src/",
     "lib/",
-    "scripts/"
+    "scripts/",
+    "template/",
+    "README.md",
+    "LICENSE"
   ],
   "author": "wipodev",
   "license": "MIT",
-  "devDependencies": {
-    "cheerio": "^1.0.0",
-    "servor": "^4.0.2"
-  },
   "dependencies": {
+    "cheerio": "^1.0.0",
     "commander": "^12.1.0",
+    "gh-pages": "^6.2.0",
+    "servor": "^4.0.2",
     "terser": "^5.36.0"
   }
 }
