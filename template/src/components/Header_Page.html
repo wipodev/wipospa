@@ -1,0 +1,221 @@
+<script>
+  function toggleTheme() {
+    const theme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }
+
+  function loadTheme() {
+    const theme = localStorage.getItem("theme");
+    document.documentElement.setAttribute("data-theme", theme ? theme : "light");
+    document.querySelector("body > header nav > a[data-theme-toggle]").addEventListener("click", toggleTheme);
+  }
+
+  function handleMenu() {
+    document.querySelector("body > header nav > button").addEventListener("click", () => {
+      document.querySelector("body > header nav > div").classList.toggle("open");
+    });
+
+    document.querySelector("body > header nav > div").addEventListener("click", () => {
+      document.querySelector("body > header nav > div").classList.remove("open");
+    });
+  }
+
+  loadTheme();
+  handleMenu();
+</script>
+
+<div class="container">
+  <a href="/" aria-label="Ir al inicio">
+    <img src="/assets/img/logo.png" alt="Logo">
+    <span>MATIVELLE</span>
+  </a>
+  <form role="search">
+    <input type="search" placeholder="Buscar..." aria-label="Buscar" />
+    <input type="submit" value="Buscar" onclick="event.preventDefault()" />
+  </form>
+  <nav>
+    <button aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+    <div class="menu">
+      <a href="/" aria-label="Ir al inicio">Inicio</a>
+      <a href="/contact" aria-label="Ir al Contacto">Contacto</a>
+    </div>
+    <a href="" aria-label="Activar o desactivar el modo oscuro" data-theme-toggle>
+      <svg version="1.1" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+        <g transform="scale(.75 .74959)">
+          <rect x="26.667" y="14.333" width="5.3333" height="3.3333" ry=".3444" />
+          <rect y="14.333" width="5.3333" height="3.3333" ry=".3444" />
+          <rect x="14.333" width="3.3333" height="5.3333" ry=".3444" />
+          <rect x="14.333" y="26.684" width="3.3333" height="5.3333" ry=".3444" />
+          <rect transform="rotate(45)" x="33.303" y="-1.6667" width="5.3333" height="3.3333" ry=".3444" />
+          <rect transform="rotate(45)" x="6.6182" y="-1.6667" width="5.3333" height="3.3333" ry=".3444" />
+          <rect transform="rotate(-45)" x="10.676" y="20.961" width="5.3333" height="3.3333" ry=".3444" />
+          <rect transform="rotate(-45)" x="-16.009" y="20.961" width="5.3333" height="3.3333" ry=".3444" />
+          <circle cx="16" cy="16" r="8.4" />
+        </g>
+        <path
+          d="m11.731 3.1859c-4.6563 0.2784-8.2934 4.1295-8.3059 8.7936-0.0014471 4.8792 3.9535 8.8355 8.8333 8.8355 3.7471-0.009153 7.0805-2.3816 8.3169-5.9186-5.5043 0.54039-11.129-5.3242-8.8443-11.711z"
+          display="none" />
+      </svg>
+    </a>
+  </nav>
+</div>
+
+<style>
+  :root {
+    --wipo-body-header-height: 70px;
+  }
+
+  [data-theme="light"],
+  :root:not([data-theme="dark"]) {
+    body>header nav a svg {
+      g {
+        display: inline;
+      }
+
+      path {
+        display: none;
+      }
+    }
+  }
+
+  [data-theme="dark"] {
+    body>header nav a svg {
+      g {
+        display: none;
+      }
+
+      path {
+        display: inline;
+      }
+    }
+  }
+
+  /*
+* Header page
+*/
+
+  body>header {
+    --pico-block-spacing-vertical: 0;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    height: var(--wipo-body-header-height);
+    background-color: var(--pico-background-color);
+    border-bottom: 1px solid var(--pico-form-element-border-color);
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-inline: var(--pico-spacing);
+      gap: var(--pico-spacing);
+    }
+
+    .container>a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+
+      img {
+        height: calc(var(--wipo-body-header-height) - 1px);
+        min-width: var(--wipo-body-header-height);
+      }
+
+      span {
+        display: block;
+      }
+
+      @media (max-width: 768px) {
+        span {
+          display: none;
+        }
+      }
+    }
+
+    .container>form {
+      margin: 0;
+
+      input {
+        padding: 0.5rem 1rem;
+        max-height: 2.5rem;
+      }
+    }
+
+    .container>nav {
+      display: flex;
+      align-items: center;
+
+      button {
+        display: flex;
+        padding: 0;
+        font-size: 2rem;
+        background-color: transparent;
+        border: none;
+        color: var(--pico-primary);
+      }
+
+      button:is(:hover, :focus) {
+        --pico-box-shadow: none;
+      }
+
+      div {
+        display: none;
+        top: -100%;
+        transition: top var(--pico-transition);
+
+        a {
+          text-decoration: none;
+          padding: var(--pico-spacing);
+          background-color: var(--wipo-background-default);
+          border-bottom: var(--pico-border-width) solid var(--pico-form-element-border-color);
+
+          &:is(:hover, :focus) {
+            text-decoration: none;
+            background-color: var(--pico-primary);
+            color: var(--pico-primary-inverse);
+          }
+        }
+      }
+
+      svg {
+        margin-left: var(--pico-spacing);
+      }
+
+      div.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: calc(100% + var(--pico-border-width));
+        left: 0;
+        width: 100%;
+        z-index: 1;
+      }
+
+      @media (min-width: 768px) {
+        button {
+          display: none;
+        }
+
+        div.menu {
+          display: flex;
+          flex-direction: row;
+          position: static;
+
+          a {
+            border-bottom: none;
+            padding: 0.5rem 1rem;
+            background-color: transparent;
+          }
+
+          a:is(:hover, :focus) {
+            text-decoration: underline;
+            color: var(--pico-primary);
+            background-color: transparent;
+            text-underline-offset: 4px;
+          }
+        }
+      }
+    }
+  }
+</style>

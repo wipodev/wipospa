@@ -1,0 +1,37 @@
+<script>
+  import { loadComponent } from "/lib/wiview.js";
+
+  loadComponent({
+    component: "/src/components/Header_Page.html",
+    selector: "header",
+  })
+
+  loadComponent({
+    component: "/src/components/Footer_Page.html",
+    selector: "body",
+    replaceContent: false
+  })
+</script>
+
+<header></header>
+
+<main></main>
+
+<style>
+  body {
+    min-height: 100vh;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      max-width: 100%;
+      padding-inline: 0;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .container {
+      max-width: 1200px;
+    }
+  }
+</style>
