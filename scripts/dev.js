@@ -4,7 +4,7 @@ import { join } from "path";
 import { copy } from "../lib/utils.js";
 
 export function modeDev() {
-  copy("../src/core.js", "lib/wiview.js");
+  copy("../src/core.js", "scripts/wiview.js");
 
   const servorProcess = exec("npx servor --reload");
 
@@ -20,7 +20,7 @@ export function modeDev() {
     console.log("\nClosing the server...");
     servorProcess.kill("SIGINT");
     try {
-      rmSync(join(process.cwd(), "/lib/wiview.js"));
+      rmSync(join(process.cwd(), "/scripts/wiview.js"));
     } catch (err) {
       console.error("Error deleting file:", err);
     }
