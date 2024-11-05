@@ -25,7 +25,7 @@ program
   .command("build")
   .description("Run build mode")
   .action(async () => {
-    const runtime = await import("../scripts/build.js");
+    const runtime = await import("../scripts/build2.js");
     runtime.modeBuild();
   });
 
