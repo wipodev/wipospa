@@ -6,7 +6,7 @@ import { copy } from "../lib/utils.js";
 export function modeDev() {
   copy("../src/core.js", "scripts/wiview.js");
 
-  const servorProcess = exec("npx servor --reload");
+  const servorProcess = exec("servor --reload");
 
   servorProcess.stdout.on("data", (data) => {
     console.log(data.toString());

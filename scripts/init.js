@@ -12,8 +12,10 @@ export function init() {
     const pkg = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
     pkg.scripts = {
       ...pkg.scripts,
-      dev: "npx wiview dev",
-      build: "npx wiview build",
+      dev: "wiview dev",
+      build: "wiview build",
+      preview: "wiview preview",
+      deploy: "wiview deploy",
     };
     fs.writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2), "utf8");
     console.log("Project initialized.");
