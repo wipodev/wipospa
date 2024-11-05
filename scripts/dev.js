@@ -4,11 +4,11 @@ import { join } from "path";
 import { copy } from "../lib/utils.js";
 
 export function modeDev() {
-  copy("src/core.js", "dev/lib/winify.js");
-  copy("src/config.js", "dev/lib/winify.config.js", false);
-  copy("src/app.js", "dev/app.js");
+  copy("../src/core.js", "lib/winify.js");
+  copy("../src/config.js", "lib/winify.config.js", false);
+  copy("../src/app.js", "app.js");
 
-  const servorProcess = exec("npx servor example index.html 8080 --reload");
+  const servorProcess = exec("npx servor --reload");
 
   servorProcess.stdout.on("data", (data) => {
     console.log(data.toString());
@@ -22,8 +22,8 @@ export function modeDev() {
     console.log("\nClosing the server...");
     servorProcess.kill("SIGINT");
     try {
-      rmSync(join(process.cwd(), "/dev/lib/winify.js"));
-      rmSync(join(process.cwd(), "/dev/app.js"));
+      rmSync(join(process.cwd(), "/lib/winify.js"));
+      rmSync(join(process.cwd(), "/app.js"));
     } catch (err) {
       console.error("Error deleting file:", err);
     }
