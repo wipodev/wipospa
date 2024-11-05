@@ -23,6 +23,7 @@
     "servor": "^4.0.2"
   },
   "dependencies": {
-    "commander": "^12.1.0"
+    "commander": "^12.1.0",
+    "terser": "^5.36.0"
   }
 }
