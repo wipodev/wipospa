@@ -29,4 +29,20 @@ program
     runtime.modeBuild();
   });
 
+program
+  .command("preview")
+  .description("preview built web")
+  .action(async () => {
+    const runtime = await import("../scripts/preview.js");
+    runtime.preview();
+  });
+
+program
+  .command("deploy")
+  .description("deploy to gh-pages")
+  .action(async () => {
+    const runtime = await import("../scripts/deploy.js");
+    runtime.deploy();
+  });
+
 program.parse(process.argv);
