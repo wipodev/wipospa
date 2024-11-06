@@ -217,6 +217,29 @@ With this configuration, `wiview` loads the components in the specified location
 
 Contributions are welcome. If you encounter any problems or have ideas to improve `wiview`, please open an issue in the GitHub repository.
 
+## Icons Attribution
+
+The icons used in this project include both icons from [Font Awesome](https://fontawesome.com) and original icons created specifically for this project. All icons are licensed under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). Appropriate credit should be given as specified in the license.
+
 ## License
 
+### Code License
+
 The code in this project is licensed under the MIT License. - see the [LICENSE](https://github.com/wipodev/wiview/blob/main/LICENCE) file for details.
+
+### Icons License
+
+The icons provided in this project are licensed under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+
+You are free to:
+
+- **Share** — copy and redistribute the material in any medium or format
+- **Adapt** — remix, transform, and build upon the material for any purpose, even commercially.
+
+Under the following terms:
+
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+
+### Logo Usage Restriction
+
+The `WiView` logo is proprietary and created solely for representing this project. It is not covered by the Creative Commons license and may not be used, modified, or distributed outside of this project or for any other purposes without explicit permission.
