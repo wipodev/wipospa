@@ -8,7 +8,7 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "node bin/Cli.js dev"
+    "template": "servor template index.html --reload"
   },
   "files": [
     "bin/",

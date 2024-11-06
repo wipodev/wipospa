@@ -4,8 +4,8 @@ export const config = {
     "/": {
       component: "/app/views/home.html",
     },
-    "/contact": {
-      component: "/app/views/contact.html",
+    "/about": {
+      component: "/app/views/about.html",
     },
   },
   selector: "main",
