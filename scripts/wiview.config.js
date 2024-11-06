@@ -1,11 +1,11 @@
 export const config = {
-  layout: "/app/layout.html",
+  layout: "/wiview/app/layout.html",
   routes: {
-    "/": {
-      component: "/app/views/home.html",
+    "/wiview/": {
+      component: "/wiview/app/views/home.html",
     },
-    "/about": {
-      component: "/app/views/about.html",
+    "/wiview/about": {
+      component: "/wiview/app/views/about.html",
     },
   },
   selector: "main",

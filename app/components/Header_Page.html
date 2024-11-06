@@ -1,8 +1,8 @@
 <script>
-  import { loadComponent } from "/scripts/wiview.js";
+  import { loadComponent } from "/wiview/scripts/wiview.js";
 
   loadComponent({
-    component: "/app/components/Title_Lib.html",
+    component: "/wiview/app/components/Title_Lib.html",
     selector: "[data-title-lib]",
   })
 
@@ -36,15 +36,15 @@
 </script>
 
 <div class="container">
-  <a href="/" aria-label="Go to the beginning">
-    <img src="/assets/img/logo.png" alt="Logo">
+  <a href="/wiview/" aria-label="Go to the beginning">
+    <img src="/wiview/assets/img/logo.png" alt="Logo">
     <h2 data-title-lib></h2>
   </a>
   <nav>
     <button aria-label="Open menu" class="btn" data-btn-menu><i class="wi wi-bars"></i></button>
     <div class="menu">
-      <a href="/" aria-label="Go to the beginning">Inicio</a>
-      <a href="/about" aria-label="Go to Contact">About</a>
+      <a href="/wiview/" aria-label="Go to the beginning">Inicio</a>
+      <a href="/wiview/about" aria-label="Go to Contact">About</a>
       <button aria-label="Turn dark mode on or off" class="btn" data-theme-toggle><i class="wi wi-sun"></i> <span>Dark
           Mode</span></button>
     </div>
