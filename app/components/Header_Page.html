@@ -17,7 +17,7 @@
 
   function loadTheme() {
     const theme = localStorage.getItem("theme");
-    document.documentElement.setAttribute("data-theme", theme ? theme : "light");
+    document.documentElement.setAttribute("data-theme", theme ? theme : "dark");
     document.querySelector("[data-theme-toggle]").addEventListener("click", toggleTheme);
   }
 
