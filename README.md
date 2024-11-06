@@ -1,29 +1,8 @@
-<style>
-  [data-title-lib] {
-    display: flex;
-    align-items: baseline;
-    font-size: 1rem;
-    gap: .2em;
-    color: var(--pico-h4-color);
-
-    .large-print {
-      font-size: 1.5em;
-    }
-  }
-</style>
-
 <div align="center">
   <img src="https://raw.githubusercontent.com/wipodev/wiview/196dc75c180f8bddd09d4c085070b6213efb2ae0/template/assets/img/logo.svg" alt="wiview logo"/>
 </div>
 
-<h1 data-title-lib>
-  <span class="large-print">W</span>
-  <span>I</span>
-  <span class="large-print">V</span>
-  <span>I</span>
-  <span>E</span>
-  <span>W</span>
-</h1>
+# W I V I E W
 
 `wiview` is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With `wiview`, you can load HTML components asynchronously, manage routes in a simple way, and inject custom elements into the head of your document.
 
