@@ -1,6 +1,6 @@
 {
   "name": "wiview",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "bin/Cli.js",
   "bin": {
@@ -8,7 +8,8 @@
   },
   "type": "module",
   "scripts": {
-    "template": "servor template index.html --reload"
+    "template": "node bin/Cli.js dev -p template/src -m src",
+    "dev-web": "node bin/Cli.js dev -p web/src -m src"
   },
   "files": [
     "bin/",
