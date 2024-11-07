@@ -3,8 +3,8 @@ import { exec } from "child_process";
 import { join } from "path";
 import { copy } from "../lib/utils.js";
 
-export function modeDev(basePath, baseModulePath) {
-  copy(`${baseModulePath}/core.js`, `${basePath}/scripts/wiview.js`);
+export function modeDev(basePath, modulePath) {
+  copy(`${modulePath}/core.js`, `${basePath}/scripts/wiview.js`);
 
   const servorProcess = exec(`servor ${basePath} index.html --reload`);
 
