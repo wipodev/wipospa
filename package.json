@@ -9,7 +9,10 @@
   "type": "module",
   "scripts": {
     "template": "node bin/Cli.js dev -p template/src -m src",
-    "dev-web": "node bin/Cli.js dev -p web/src -m src"
+    "web-dev": "node bin/Cli.js dev -p web/src -m src",
+    "web-build": "node bin/Cli.js build -o web/src -d web/dist -m src",
+    "web-preview": "node bin/Cli.js preview -p web/dist",
+    "web-deploy": "node bin/Cli.js deploy -p web/dist -c web/wiview.config.js"
   },
   "files": [
     "bin/",
