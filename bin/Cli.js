@@ -16,9 +16,11 @@ program
 program
   .command("dev")
   .description("Run development mode")
-  .action(async () => {
+  .option("-p, --path <path>", "Specify the base path", "src")
+  .option("-m, --module-path <path>", "Specify the base module path", "node_modules/wiview/src")
+  .action(async (cmd) => {
     const runtime = await import("../scripts/dev.js");
-    runtime.modeDev();
+    runtime.modeDev(cmd.path, cmd.modulePath);
   });
 
 program
