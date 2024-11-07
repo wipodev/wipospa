@@ -1,11 +1,11 @@
 import { ensureDirectoryExists, copy, minifyJavaScript } from "../lib/utils.js";
 
-export function modeBuild() {
+export function modeBuild(originPath, distPath, ModulePath) {
   ensureDirectoryExists("dist");
-  minifyJavaScript("app.js", "dist/app.js");
-  minifyJavaScript("../src/core.js", "dist/scripts/wiview.js");
-  minifyJavaScript("scripts/wiview.config.js", "dist/scripts/wiview.config.js");
-  copy("index.html", "dist/index.html");
-  copy("assets", "dist/assets");
-  copy("app", "dist/app");
+  minifyJavaScript(`${originPath}/app.js`, `${distPath}/app.js`);
+  minifyJavaScript(`${ModulePath}/core.js`, `${distPath}/scripts/wiview.js`);
+  minifyJavaScript(`${originPath}/scripts/routes.js`, `${distPath}/scripts/routes.js`);
+  copy(`${originPath}/index.html`, `${distPath}/index.html`);
+  copy(`${originPath}/assets`, `${distPath}/assets`);
+  copy(`${originPath}/app`, `${distPath}/app`);
 }

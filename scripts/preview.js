@@ -1,7 +1,7 @@
 import { exec } from "child_process";
 
-export function preview() {
-  const servorProcess = exec("servor dist index.html --reload");
+export function preview(dir) {
+  const servorProcess = exec(`servor ${dir} index.html --reload`);
 
   servorProcess.stdout.on("data", (data) => {
     console.log(data.toString());
