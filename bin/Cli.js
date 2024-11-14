@@ -1,56 +1,40 @@
 #!/usr/bin/env node
 
 import { program } from "commander";
-import { getVersion } from "../lib/utils.js";
-
-program.version("v" + getVersion(), "-v, --version", "Show version").helpCommand();
+import { init } from "../commands/init.js";
+import { dev } from "../commands/dev.js";
+import { builder } from "../commands/build.js";
+import { previewer } from "../commands/preview.js";
+import { deploy } from "../commands/deploy.js";
+import { getVersion } from "../commands/utils.js";
 
 program
-  .command("init")
-  .description("Initialize the project")
-  .action(async () => {
-    const runtime = await import("../scripts/init.js");
-    runtime.init();
-  });
+  .name("wiview")
+  .version("v" + getVersion(), "-v, --version", "Show version")
+  .helpCommand();
+
+program.command("init").description("Initialize a project with a base template").action(init);
 
 program
   .command("dev")
-  .description("Run development mode")
-  .option("-p, --path <path>", "Specify the base path", "src")
-  .option("-m, --module-path <path>", "Specify the base module path", "node_modules/wiview/src")
-  .action(async (cmd) => {
-    const runtime = await import("../scripts/dev.js");
-    runtime.modeDev(cmd.path, cmd.modulePath);
-  });
+  .description("Start the development server")
+  .option("-r, --root <root>", "Root directory for the project", "src")
+  .action((options) => dev(options));
 
 program
   .command("build")
-  .description("Run build mode")
-  .option("-o, --origin-path <path>", "Specify the origin path", "src")
-  .option("-d, --dist-path <path>", "Specify the dist path", "dist")
-  .option("-m, --module-path <path>", "Specify the base module path", "node_modules/wiview/src")
-  .action(async (cmd) => {
-    const runtime = await import("../scripts/build2.js");
-    runtime.modeBuild(cmd.originPath, cmd.distPath, cmd.modulePath);
-  });
+  .description("Build the project for production")
+  .option("-r, --root <root>", "Root directory for the project", "src")
+  .option("-o, --output <output>", "Output directory for the project", "dist")
+  .action((options) => builder(options));
 
-program
-  .command("preview")
-  .description("preview built web")
-  .option("-p, --path <path>", "Specify the dist path", "dist")
-  .action(async (cmd) => {
-    const runtime = await import("../scripts/preview.js");
-    runtime.preview(cmd.path);
-  });
+program.command("preview").description("Preview the project in the browser").action(previewer);
 
 program
   .command("deploy")
   .description("deploy to gh-pages")
   .option("-p, --path <path>", "Specify the dist path", "dist")
   .option("-c, --config <path>", "Specify the config path", "wiview.config.js")
-  .action(async (cmd) => {
-    const runtime = await import("../scripts/deploy.js");
-    runtime.deploy(cmd.path, cmd.config);
-  });
+  .action((options) => deploy(options));
 
 program.parse(process.argv);
