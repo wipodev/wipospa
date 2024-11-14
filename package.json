@@ -1,35 +1,44 @@
 {
   "name": "wiview",
-  "version": "0.1.1",
-  "description": "",
-  "main": "bin/Cli.js",
+  "version": "1.0.0",
+  "description": "wiview is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With wiview, you can load HTML components asynchronously, manage routes in a simple way, and inject custom elements into the head of your document.",
+  "type": "module",
+  "main": "dist/wiview.cjs.js",
+  "module": "dist/wiview.es.js",
   "bin": {
     "wiview": "./bin/Cli.js"
   },
-  "type": "module",
-  "scripts": {
-    "template": "node bin/Cli.js dev -p template/src -m src",
-    "web-dev": "node bin/Cli.js dev -p web/src -m src",
-    "web-build": "node bin/Cli.js build -o web/src -d web/dist -m src",
-    "web-preview": "node bin/Cli.js preview -p web/dist",
-    "web-deploy": "node bin/Cli.js deploy -p web/dist -c web/wiview.config.js"
-  },
   "files": [
     "bin/",
-    "src/",
-    "lib/",
-    "scripts/",
+    "commands/",
+    "dist/",
     "template/",
     "README.md",
     "LICENSE"
   ],
-  "author": "wipodev",
-  "license": "MIT",
+  "scripts": {
+    "dev": "vite sandbox",
+    "build": "vite build"
+  },
   "dependencies": {
-    "cheerio": "^1.0.0",
     "commander": "^12.1.0",
     "gh-pages": "^6.2.0",
-    "servor": "^4.0.2",
-    "terser": "^5.36.0"
-  }
+    "vite": "^5.4.10"
+  },
+  "keywords": [
+    "wiview",
+    "wipodev",
+    "cli",
+    "web",
+    "component",
+    "dynamic",
+    "loading",
+    "html",
+    "javascript",
+    "library",
+    "routes",
+    "template"
+  ],
+  "author": "wipodev",
+  "license": "MIT"
 }
