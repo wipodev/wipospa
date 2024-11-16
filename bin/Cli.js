@@ -18,13 +18,13 @@ program.command("init").description("Initialize a project with a base template")
 program
   .command("dev")
   .description("Start the development server")
-  .option("-r, --root <root>", "Root directory for the project", "src")
+  .option("-r, --root <root>", "Root directory for the project", ".")
   .action((options) => dev(options));
 
 program
   .command("build")
   .description("Build the project for production")
-  .option("-r, --root <root>", "Root directory for the project", "src")
+  .option("-r, --root <root>", "Root directory for the project", ".")
   .option("-o, --output <output>", "Output directory for the project", "dist")
   .action((options) => builder(options));
 

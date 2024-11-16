@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   build: {
     lib: {
-      entry: "./lib/core.js",
+      entry: "./lib/index.js",
       name: "wiview",
       fileName: (format) => `wiview.${format}.js`,
       formats: ["es", "cjs"],

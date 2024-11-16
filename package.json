@@ -1,6 +1,6 @@
 {
   "name": "wiview",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "wiview is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With wiview, you can load HTML components asynchronously, manage routes in a simple way, and inject custom elements into the head of your document.",
   "type": "module",
   "main": "dist/wiview.cjs.js",
@@ -12,12 +12,20 @@
     "bin/",
     "commands/",
     "dist/",
+    "plugins/",
     "template/",
     "README.md",
     "LICENSE"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/wiview.es.js",
+      "require": "./dist/wiview.cjs.js"
+    },
+    "./plugin": "./plugins/vite-plugin-wiview.js"
+  },
   "scripts": {
-    "dev": "vite sandbox",
+    "dev": "vite sandbox --host",
     "build": "vite build"
   },
   "dependencies": {
