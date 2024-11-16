@@ -6,7 +6,7 @@ export function replaceWiviewImports() {
     apply: "serve",
     transform(code, id) {
       if (id.endsWith(".html")) {
-        const jsonPath = "node_modules/.vite/deps/_metadata.json";
+        const jsonPath = "./node_modules/.vite/deps/_metadata.json";
         const jsonData = JSON.parse(readFileSync(jsonPath, "utf-8"));
         const modifiedCode = code.replace(
           /import\s+{([^}]+)}\s+from\s+['"]wiview['"]/g,
