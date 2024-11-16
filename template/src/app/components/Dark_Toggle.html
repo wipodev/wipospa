@@ -1,9 +1,9 @@
 <script>
-  import { getState } from "wiview";
+  import { getState, updateState } from "wiview";
 
   function toggleTheme() {
     const state = getState("DarkToggle");
-    state.setState({ theme: state.theme === "sun" ? "moon" : "sun" });
+    updateState("DarkToggle", { theme: state.theme === "sun" ? "moon" : "sun" });
     const theme = state.theme === "sun" ? "dark" : "light";
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);

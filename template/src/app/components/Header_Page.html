@@ -1,10 +1,15 @@
 <script>
-  import { getState } from "wiview"
+  import { getState, updateState } from "wiview"
 
   document.querySelector("[data-btn-menu]").addEventListener("click", () => {
     const state = getState("HeaderPage");
-    state.setState({ menu: state.menu === "open" ? "" : "open" });
+    updateState("HeaderPage", { menu: state.menu === "open" ? "" : "open" });
   });
+
+  document.querySelector(".menu").addEventListener("click", () => {
+    const state = getState("HeaderPage");
+    updateState("HeaderPage", { menu: "" });
+  })
 </script>
 
 <header>
