@@ -1,7 +1,9 @@
-import { Router } from "/scripts/wiview.js";
-import { config } from "/scripts/routes.js";
+import { registerComponent, Router } from "wiview";
+import { components } from "./app/components/defineComponents.js";
+import { routes } from "./app/views/defineRoutes.js";
 
-const router = Router(config);
+registerComponent(components);
+const router = Router(routes);
 
 window.addEventListener("load", () => {
   router.init();

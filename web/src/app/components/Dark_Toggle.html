@@ -1,0 +1,24 @@
+<script>
+  import { getState } from "wiview";
+
+  function toggleTheme() {
+    const state = getState("DarkToggle");
+    state.setState({ theme: state.theme === "sun" ? "moon" : "sun" });
+    const theme = state.theme === "sun" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }
+
+  function loadTheme() {
+    const theme = localStorage.getItem("theme");
+    document.documentElement.setAttribute("data-theme", theme ? theme : "light");
+    document.querySelector("[data-theme-toggle]").addEventListener("click", toggleTheme);
+  }
+
+  loadTheme();
+</script>
+
+<button aria-label="Turn dark mode on or off" class="btn" data-theme-toggle>
+  <i class="wi wi-{theme}"></i>
+  <span>Dark Mode</span>
+</button>

@@ -1,0 +1,14 @@
+{
+  "name": "wiview_web",
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "wiview": "file:../wiview-1.0.0.tgz"
+  },
+  "scripts": {
+    "dev": "wiview dev",
+    "build": "wiview build",
+    "preview": "wiview preview",
+    "deploy": "wiview deploy"
+  }
+}
