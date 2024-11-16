@@ -1,21 +1,12 @@
-<script>
-  import { loadComponent } from "/scripts/wiview.js";
-
-  loadComponent({
-    component: "/app/components/Title_Lib.html",
-    selector: "h1 span[data-title-lib]",
-  })
-</script>
-
 <wiview:head>
   <title>WiView - JavaScript library for dynamic loading of HTML components</title>
   <meta name="description"
-    content="wiview is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With `wiview`, you can load HTML components asynchronously, manage routes in a simple way, and inject custom elements into the head of your document." />
+    content="wiview is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With wiview, you can load HTML components asynchronously, manage routes in a simple way, and inject custom elements into the head of your document." />
 </wiview:head>
 
 <section>
   <img src="/assets/img/logo.svg" alt="logo">
-  <h1>Welcome to Your <span data-title-lib></span> App</h1>
+  <h1>Welcome to Your <TitleLib></TitleLib> App</h1>
   <p>With <strong>wiview</strong>, you can load HTML components asynchronously, manage routes in a simple way, and
     inject custom elements
     into the head of your document.</p>
@@ -30,6 +21,7 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    padding-inline: var(--pico-spacing);
 
     section img {
       width: 30%;
