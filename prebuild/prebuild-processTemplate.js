@@ -1,12 +1,20 @@
 import * as cheerio from "cheerio";
 
-export const templateProcessor = (template) => {
+/**
+ * Processes a given HTML template by extracting the content of the <head> tag into the "headContent" variable,
+ * extracting all <script> tags into the "scriptContent" variable,
+ * extracting all <style> tags into the "styleContent" variable,
+ * and returning the processed template without the extracted parts in the "templateContent" variable.
+ * @param {string} template - The template to process.
+ * @returns {Object} An object containing the processed template and the extracted content of the <head>, <script>, and <style> tags.
+ */
+export function templateProcessor(template) {
   const { templateWithoutHead, headContent } = headProcessor(template);
   const { templateWithoutScript, scriptContent } = scriptProcessor(templateWithoutHead);
   const { templateWithoutStyle, styleContent } = styleProcessor(templateWithoutScript);
   const templateContent = templateWithoutStyle;
   return { templateContent, headContent, scriptContent, styleContent };
-};
+}
 
 function headProcessor(html) {
   const $ = cheerio.load(html);
@@ -20,12 +28,22 @@ function scriptProcessor(html) {
   const $ = cheerio.load(html);
   const importRegex = /import\s+.+?['"].+?['"]\s*;?/g;
   const stringCode = $("script").html();
-  const scriptContent = stringCode ? `() => {${stringCode.replace(importRegex, "")}}`: "";
+  const scriptContent = stringCode ? `() => {${stringCode.replace(importRegex, "")}}` : "";
   $("script").remove();
   const templateWithoutScript = $.html();
   return { templateWithoutScript, scriptContent };
 }
 
+/**
+ * Extracts style tags and their contents from a template, and scopes their selectors
+ * to the first element in the template, if the style tag has the "scoped" attribute.
+ * If the style tag does not have the "scoped" attribute, it is removed from the
+ * template and its contents are returned as a string.
+ *
+ * @param {string} component - The template to process
+ * @returns {Object} An object containing the processed template and the extracted
+ * style content, if any.
+ */
 function styleProcessor(component) {
   const $ = cheerio.load(component);
   let styleContent = null;

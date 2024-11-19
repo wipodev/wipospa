@@ -13,6 +13,7 @@
     "commands/",
     "dist/",
     "plugins/",
+    "prebuild/",
     "template/",
     "README.md",
     "LICENSE"
@@ -22,7 +23,8 @@
       "import": "./dist/wiview.es.js",
       "require": "./dist/wiview.cjs.js"
     },
-    "./plugin": "./plugins/vite-plugin-wiview.js"
+    "./plugin": "./plugins/vite-plugin-wiview.js",
+    "./prebuild": "./prebuild/index.js"
   },
   "scripts": {
     "dev": "vite sandbox --host",
