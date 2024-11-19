@@ -1,5 +1,14 @@
 import { readFileSync } from "fs";
 
+/**
+ * Vite plugin to replace 'import { ... } from "wiview"' to
+ * 'import { ... } from "/node_modules/.vite/deps/wiview.js?v=<browserHash>"'
+ * in HTML files, and wrap the code with 'export default `<code>`'.
+ * This is necessary because Vite's built-in HTML plugin does not support
+ * imports in HTML files.
+ *
+ * @returns {import("vite").Plugin} Vite plugin.
+ */
 export function replaceWiviewImports() {
   return {
     name: "replace-wiview-import",

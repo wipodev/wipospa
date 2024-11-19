@@ -4,11 +4,12 @@ import { copy } from "./utils.js";
 
 const packageJsonPath = path.resolve(process.cwd(), "package.json");
 
-export function init() {
+export function init(options) {
   console.log("Initializing the project...");
+  const root = options.root || ".";
 
   try {
-    copy("../template", ".");
+    copy("../template", root);
     console.log("Template copied successfully.");
 
     if (fs.existsSync(packageJsonPath)) {
