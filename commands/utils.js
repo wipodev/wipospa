@@ -5,6 +5,11 @@ export function getVersion() {
   return JSON.parse(fs.readFileSync("package.json", "utf8")).version;
 }
 
+export function move(source, destination, replace = true) {
+  copy(source, destination, replace);
+  fs.rmSync(source, { recursive: true, force: true });
+}
+
 export function copy(source, destination, replace = true) {
   try {
     if (!fs.existsSync(source)) {

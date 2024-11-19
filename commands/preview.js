@@ -9,8 +9,6 @@ export async function previewer() {
       },
     });
 
-    await server.listen();
-
     server.printUrls();
   } catch (error) {
     console.error("Error starting Vite server:", error);

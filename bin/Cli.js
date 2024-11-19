@@ -24,6 +24,8 @@ program
 program
   .command("build")
   .description("Build the project for production")
+  .option("-m, --mode <mode>", "Build mode (SPA, Static)", "SPA")
+  .option("-b, --base <base>", "Base URL for the project")
   .option("-r, --root <root>", "Root directory for the project", ".")
   .option("-o, --output <output>", "Output directory for the project", "dist")
   .action((options) => builder(options));
