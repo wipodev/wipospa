@@ -16,6 +16,22 @@ export function getStores() {
 }
 
 /**
+ * Retrieves a prebuilt component by its name.
+ * @param {String} name - The name of the component.
+ * @returns {Object} - An object with the following properties: template, head, style, state, beforeMount, afterMount.
+ */
+export function getComponent(name) {
+  return {
+    template: templateStore[name],
+    head: headStore[name],
+    style: styleStore[name],
+    state: stateStore[name],
+    beforeMount: beforeMountStore[name],
+    afterMount: afterMountStore[name],
+  };
+}
+
+/**
  * Registers a single component or multiple components.
  * If a string and a component definition are given, it will register a single component.
  * If an object is given, it will iterate over the object and register each component.
