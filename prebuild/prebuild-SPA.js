@@ -23,7 +23,7 @@ export async function prebuildSpa(rootDir, prebuildDir) {
   registerComponent(components);
 
   const copySources = (source) => copy(path.join(rootDir, source), path.join(prebuildDir, source));
-  const libDir = path.join(rootDir, "node_odules/wiview/prebuild/lib");
+  const libDir = path.join(rootDir, "node_modules/wiview/prebuild/lib");
 
   copy(libDir, path.join(prebuildDir, "lib"));
 
@@ -32,11 +32,11 @@ export async function prebuildSpa(rootDir, prebuildDir) {
   copySources("src/assets");
 
   const routesPath = findFile([`${rootDir}src`, `${rootDir}src/config`], ["defineRoutes.js"]);
-  const routesBuildPath = routesPath.replace(rootDir, prebuildDir);
+  const routesBuildPath = path.join(prebuildDir, routesPath);
   copy(routesPath, routesBuildPath);
 
   const { entryFileContent, entryPath } = processEntryFile(rootDir);
-  const entrybuildPath = entryPath.replace(rootDir, prebuildDir);
+  const entrybuildPath = path.join(prebuildDir, entryPath);
   fs.writeFileSync(entrybuildPath, entryFileContent, "utf8");
 
   const componentDatabaseContent = createComponentDatabase();
@@ -68,6 +68,7 @@ async function processDefineComponentsFile(rootDir) {
         value.template = fs.readFileSync(path.join(originalDir, value.template), "utf8");
       }
     }
+    fs.unlinkSync(tempFilePath);
     return defineContent.components;
   } catch (error) {
     console.error("Error processing defineComponents.js:", error);
@@ -87,17 +88,17 @@ function processEntryFile(rootDir) {
     const registerRegex = /^\s*registerComponent\(([^)]+)\);\s*/gm;
     const appContent = fs.readFileSync(entryPath, "utf8");
 
-    let modifiedContent = appContent
+    let entryFileContent = appContent
       .replace(/^(import\s*{[^}]*?)\bregisterComponent,?\s*/gm, "$1")
       .replace(/["']wiview["']/g, '"../lib/index.js"');
     let match;
 
-    while ((match = registerRegex.exec(modifiedContent)) !== null) {
+    while ((match = registerRegex.exec(entryFileContent)) !== null) {
       const variable = match[1].trim();
-      modifiedContent = modifiedContent.replace(importRegex(variable), "").replace(registerRegex, "");
+      entryFileContent = entryFileContent.replace(importRegex(variable), "").replace(registerRegex, "");
     }
 
-    return { modifiedContent, entryPath };
+    return { entryFileContent, entryPath };
   } catch (error) {
     console.error("Error processing entry file:", error);
   }
