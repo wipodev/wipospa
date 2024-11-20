@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 export function getVersion() {
-  return JSON.parse(fs.readFileSync("package.json", "utf8")).version;
+  return JSON.parse(fs.readFileSync("../package.json", "utf8")).version;
 }
 
 export function move(source, destination, replace = true) {
@@ -40,6 +40,21 @@ export function copy(source, destination, replace = true) {
   } catch (error) {
     console.error(`❌ ${error}`);
   }
+}
+
+export async function getConfig(root = "") {
+  const configPath = path.join(process.cwd(), root, "wiview.config.js");
+  if (fs.existsSync(configPath)) {
+    try {
+      const config = (await import(`file://${configPath}`)).default || {};
+      return config;
+    } catch (error) {
+      console.error("Error loading wiview.config.js:", error);
+      return {};
+    }
+  }
+  console.warn("No wiview.config.js file found, using default options.");
+  return {};
 }
 
 function ensureDirectoryExists(dir) {

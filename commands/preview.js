@@ -1,16 +1,8 @@
 import { preview } from "vite";
+import { getConfig } from "./utils.js";
 
 export async function previewer(options) {
-  let config = {};
-
-  const configPtath = `${options.root || "."}/wiview.config.js`;
-  if (fs.existsSync(configPtath)) {
-    try {
-      config = (await import(configPtath)).default || {};
-    } catch (error) {
-      console.error("Error loading wiview.config.js:", error);
-    }
-  }
+  const config = await getConfig(options.root);
 
   const finalOptions = {
     root: options.root || config.root || "./",
