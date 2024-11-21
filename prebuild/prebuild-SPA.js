@@ -25,9 +25,12 @@ export async function prebuildSpa(rootDir, prebuildDir) {
 
   const copySources = (source) => copy(path.join(rootDir, source), path.join(prebuildDir, source));
   const libDir = path.join(rootDir, "node_modules/wiview/prebuild/lib");
+  const copyLib = (source, destination = null) =>
+    copy(path.join(libDir, source), path.join(prebuildDir, "lib", destination || source));
 
-  copy(libDir, path.join(prebuildDir, "lib"));
-
+  copyLib("renderEngine.js");
+  copyLib("router.js");
+  copyLib("indexSPA.js", "index.js");
   copySources("index.html");
   copySources("public");
   copySources("src/assets");
