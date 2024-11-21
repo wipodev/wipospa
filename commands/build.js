@@ -1,6 +1,6 @@
 import fs from "fs";
 import { build } from "vite";
-import { prebuildSpa } from "wiview/prebuild";
+import { prebuildSpa, prebuildStatic } from "wiview/prebuild";
 import { move, getConfig } from "./utils.js";
 
 export async function builder(options) {
@@ -16,6 +16,8 @@ export async function builder(options) {
 
   if (finalOptions.mode === "SPA") {
     await prebuildSpa(finalOptions.root, finalOptions.buildRoot);
+  } else if (finalOptions.mode === "Static") {
+    await prebuildStatic(finalOptions.root, finalOptions.buildRoot);
   }
 
   try {

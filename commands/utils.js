@@ -57,7 +57,7 @@ export async function getConfig(root = "") {
   return {};
 }
 
-function ensureDirectoryExists(dir) {
+export function ensureDirectoryExists(dir) {
   const outputPath = path.join(process.cwd(), dir);
   if (!fs.existsSync(outputPath)) {
     fs.mkdirSync(outputPath, { recursive: true });
