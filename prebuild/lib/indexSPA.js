@@ -3,5 +3,3 @@ import { render } from "./renderEngine.js";
 import { Router } from "./router.js";
 
 export { render, Router, getState, updateState };
-
-export default { render, Router, getState, updateState };
