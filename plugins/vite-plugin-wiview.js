@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import fs from "fs";
 
 /**
  * Vite plugin to replace 'import { ... } from "wiview"' to
@@ -16,11 +16,14 @@ export function replaceWiviewImports() {
     transform(code, id) {
       if (id.endsWith(".html")) {
         const jsonPath = "./node_modules/.vite/deps/_metadata.json";
-        const jsonData = JSON.parse(readFileSync(jsonPath, "utf-8"));
-        const modifiedCode = code.replace(
-          /import\s+{([^}]+)}\s+from\s+['"]wiview['"]/g,
-          `import { $1 } from '/node_modules/.vite/deps/wiview.js?v=${jsonData.browserHash}'`
-        );
+        let modifiedCode;
+        if (fs.existsSync(jsonPath)) {
+          const jsonData = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
+          modifiedCode = code.replace(
+            /import\s+{([^}]+)}\s+from\s+['"]wiview['"]/g,
+            `import { $1 } from '/node_modules/.vite/deps/wiview.js?v=${jsonData.browserHash}'`
+          );
+        }
 
         const exportTemplate = `
             export default \`${modifiedCode}\`;
