@@ -5,8 +5,9 @@ import { registerComponent, getComponent, getStores } from "./prebuild-component
 import { processDefineComponentsFile } from "./prebuild-defineComponentsProcessor.js";
 import { findFile, copy, ensureDirectoryExists } from "./utils.js";
 
-export async function prebuildStatic(rootDir, prebuildDir) {
+export async function prebuildStatic(rootDir, prebuildDir, baseUrl) {
   try {
+    const inputPaths = {};
     const components = await processDefineComponentsFile(rootDir);
     registerComponent(components);
 
@@ -28,13 +29,20 @@ export async function prebuildStatic(rootDir, prebuildDir) {
     Object.entries(routes).forEach(([key, value]) => {
       if (key !== "layout") {
         console.log("Creating page:", key);
-        createPage(layout.html(), value.component, value.selector, path.join(prebuildDir, key));
+        createPage(layout.html(), value.component, value.selector, path.join(prebuildDir, key), baseUrl);
+        if (key === "/") {
+          inputPaths["main"] = path.join(prebuildDir, "index.html");
+        } else {
+          inputPaths[key.slice(1).toLowerCase()] = path.join(prebuildDir, key, "index.html");
+        }
       }
     });
 
-    const componentDatabaseContent = createComponentDatabase();
+    const componentDatabaseContent = createComponentDatabase(baseUrl);
     const componentDatabasePath = path.join(prebuildDir, "lib/componentDatabase.js");
     fs.writeFileSync(componentDatabasePath, componentDatabaseContent, "utf8");
+
+    return inputPaths;
   } catch (error) {
     console.error("Error building Static web:", error);
   }
@@ -65,7 +73,9 @@ function createLayout(layoutName = null, dir = null, rootDir) {
     if (componentsAfterMounted.length > 0) {
       const entryPath = findFile([rootDir, `${rootDir}src`], ["app.js", "index.js", "main.js"]);
       const entryBuildPath = path.join(dir, entryPath);
-      const entryContent = `document.addEventListener("DOMContentLoaded", () => {
+      const entryContent = `import { getState, updateState } from "../lib/index.js"
+    
+      document.addEventListener("DOMContentLoaded", () => {
           ${componentsAfterMounted.map((func) => `(${func})();`).join("\n")}
         });
       `;
@@ -79,7 +89,7 @@ function createLayout(layoutName = null, dir = null, rootDir) {
   return $;
 }
 
-function createPage(layout, name, selector, dir) {
+function createPage(layout, name, selector, dir, baseUrl) {
   const $layout = cheerio.load(layout);
   const { template, beforeMount, afterMount, head, style, state } = getComponent(name);
   const { processedTemplate, componentsAfterMounted, componentsHead, componentsStyles, componentsBeforeMount } =
@@ -107,6 +117,8 @@ function createPage(layout, name, selector, dir) {
   if (componentsHead.length > 0) {
     updateHead(componentsHead, $layout);
   }
+
+  updateInternalLinks($layout, baseUrl);
 
   const html = $layout.html();
 
@@ -224,8 +236,14 @@ function updateHeadElement($, $element) {
   }
 }
 
-function createComponentDatabase() {
+function createComponentDatabase(baseUrl) {
   const { templateStore, stateStore } = getStores();
+
+  Object.entries(templateStore).forEach(([name, content]) => {
+    const $ = cheerio.load(content);
+    updateAllInternalLinks($, baseUrl);
+    templateStore[name] = $.html();
+  });
 
   const outputContent = `
   import { updateComponent } from "./reactivityEngine.js";
@@ -250,4 +268,32 @@ function createComponentDatabase() {
   `;
 
   return outputContent;
+}
+
+function updateInternalLinks($layout, base, tag = "a", attr = "href") {
+  $layout(`${tag}[${attr}]`).each((_, element) => {
+    const $element = $layout(element);
+    const url = $element.attr(attr);
+
+    if (url.startsWith("/")) {
+      const newUrl = url === "/" ? base : `${base}${url.slice(1)}${tag === "a" ? "/" : ""}`;
+      $element.attr(attr, newUrl);
+    }
+  });
+}
+
+function updateAllInternalLinks($layout, base) {
+  const elementsWithUrls = [
+    { tag: "a", attr: "href" },
+    { tag: "img", attr: "src" },
+    { tag: "video", attr: "src" },
+    { tag: "video", attr: "poster" },
+    { tag: "audio", attr: "src" },
+    { tag: "source", attr: "src" },
+    { tag: "form", attr: "action" },
+  ];
+
+  elementsWithUrls.forEach(({ tag, attr }) => {
+    updateInternalLinks($layout, base, tag, attr);
+  });
 }
