@@ -32,7 +32,8 @@ program
   .option("-m, --mode <mode>", "Build mode (SPA, Static)")
   .option("-b, --base <base>", "Base URL for the project")
   .option("-r, --root <root>", "Root directory for the project")
-  .option("-o, --output <output>", "Output directory for the project")
+  .option("-b, --buildRoot <buildRoot>", "Build root directory for the project")
+  .option("-o, --outDir <outDir>", "Output directory for the build")
   .action((options) => builder(options));
 
 program
@@ -44,8 +45,7 @@ program
 program
   .command("deploy")
   .description("deploy to gh-pages")
-  .option("-p, --path <path>", "Specify the dist path", "dist")
-  .option("-c, --config <path>", "Specify the config path", "wiview.config.js")
+  .option("-o, --outDir <outDir>", "Output directory for the build")
   .action((options) => deploy(options));
 
 program.parse(process.argv);
