@@ -32,7 +32,7 @@ program
   .option("-m, --mode <mode>", "Build mode (SPA, Static)")
   .option("-b, --base <base>", "Base URL for the project")
   .option("-r, --root <root>", "Root directory for the project")
-  .option("-b, --buildRoot <buildRoot>", "Build root directory for the project")
+  .option("-p, --prebuild <prebuild>", "preBuild root directory for the project")
   .option("-o, --outDir <outDir>", "Output directory for the build")
   .action((options) => builder(options));
 

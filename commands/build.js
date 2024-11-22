@@ -5,12 +5,12 @@ import { move, getConfig } from "./utils.js";
 
 export async function builder(options) {
   const config = await getConfig(options.root);
-  let inputPaths = {};
+  let inputPaths = undefined;
 
   const finalOptions = {
     base: options.base || config.base || "/",
     root: options.root || config.root || "./",
-    buildRoot: options.buildRoot || config.build?.root || "./prebuild",
+    buildRoot: options.prebuild || config.build?.prebuild || "./prebuild",
     mode: options.mode || config.build?.mode || "SPA",
     outDir: options.outDir || config.build?.outDir || "dist",
   };
