@@ -81,7 +81,7 @@ export const updateComponent = (name, targetElement = document.querySelector(`[d
   const template = getTemplate(name);
   const state = getState(name);
   if (template && state) {
-    const { processedTemplate } = processSubcomponents(template);
+    const processedTemplate = processSubcomponents(template);
     const renderedTemplate = interpolateTemplate(processedTemplate, state);
 
     const parser = new DOMParser();
