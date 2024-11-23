@@ -43,17 +43,17 @@ export function copy(source, destination, replace = true) {
 }
 
 export async function getConfig(root = "") {
-  const configPath = path.join(process.cwd(), root, "wiview.config.js");
+  const configPath = path.join(process.cwd(), root, "wivex.config.js");
   if (fs.existsSync(configPath)) {
     try {
       const config = (await import(`file://${configPath}`)).default || {};
       return config;
     } catch (error) {
-      console.error("Error loading wiview.config.js:", error);
+      console.error("Error loading wivex.config.js:", error);
       return {};
     }
   }
-  console.warn("No wiview.config.js file found, using default options.");
+  console.warn("No wivex.config.js file found, using default options.");
   return {};
 }
 

@@ -1,6 +1,6 @@
 import fs from "fs";
 import { build } from "vite";
-import { prebuildSpa, prebuildStatic } from "wiview/prebuild";
+import { prebuildSpa, prebuildStatic } from "wivex/prebuild";
 import { move, getConfig } from "./utils.js";
 
 export async function builder(options) {

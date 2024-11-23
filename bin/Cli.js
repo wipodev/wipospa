@@ -9,7 +9,7 @@ import { deploy } from "../commands/deploy.js";
 import { getVersion } from "../commands/utils.js";
 
 program
-  .name("wiview")
+  .name("wivex")
   .version("v" + getVersion(), "-v, --version", "Show version")
   .helpCommand();
 

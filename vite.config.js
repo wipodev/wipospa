@@ -5,8 +5,8 @@ export default defineConfig({
     minify: false,
     lib: {
       entry: "./lib/index.js",
-      name: "wiview",
-      fileName: (format) => `wiview.${format}.js`,
+      name: "wivex",
+      fileName: (format) => `wivex.${format}.js`,
       formats: ["es", "cjs"],
     },
     rollupOptions: {

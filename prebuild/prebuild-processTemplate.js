@@ -18,8 +18,8 @@ export function templateProcessor(template) {
 
 function headProcessor(html) {
   const $ = cheerio.load(html);
-  const headContent = $("wiview\\:head").html();
-  $("wiview\\:head").remove();
+  const headContent = $("wivex\\:head").html();
+  $("wivex\\:head").remove();
   const templateWithoutHead = $.html();
   return { templateWithoutHead, headContent };
 }

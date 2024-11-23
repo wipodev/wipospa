@@ -1,4 +1,4 @@
-import { registerComponent, Router } from "wiview";
+import { registerComponent, Router } from "wivex";
 import { components } from "./config/defineComponents.js";
 import { routes } from "./config/defineRoutes.js";
 

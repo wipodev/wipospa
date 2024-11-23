@@ -1,17 +1,17 @@
 import fs from "fs";
 
 /**
- * Vite plugin to replace 'import { ... } from "wiview"' to
- * 'import { ... } from "/node_modules/.vite/deps/wiview.js?v=<browserHash>"'
+ * Vite plugin to replace 'import { ... } from "wivex"' to
+ * 'import { ... } from "/node_modules/.vite/deps/wivex.js?v=<browserHash>"'
  * in HTML files, and wrap the code with 'export default `<code>`'.
  * This is necessary because Vite's built-in HTML plugin does not support
  * imports in HTML files.
  *
  * @returns {import("vite").Plugin} Vite plugin.
  */
-export function replaceWiviewImports() {
+export function replaceWivexImports() {
   return {
-    name: "replace-wiview-import",
+    name: "replace-wivex-import",
     apply: "serve",
     transform(code, id) {
       if (id.endsWith(".html")) {
@@ -20,8 +20,8 @@ export function replaceWiviewImports() {
         if (fs.existsSync(jsonPath)) {
           const jsonData = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
           modifiedCode = code.replace(
-            /import\s+{([^}]+)}\s+from\s+['"]wiview['"]/g,
-            `import { $1 } from '/node_modules/.vite/deps/wiview.js?v=${jsonData.browserHash}'`
+            /import\s+{([^}]+)}\s+from\s+['"]wivex['"]/g,
+            `import { $1 } from '/node_modules/.vite/deps/wivex.js?v=${jsonData.browserHash}'`
           );
         }
 

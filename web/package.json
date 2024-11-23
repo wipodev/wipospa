@@ -1,14 +1,14 @@
 {
-  "name": "wiview_web",
-  "version": "0.1.0",
+  "name": "wivex-web",
+  "version": "0.0.1",
   "type": "module",
-  "dependencies": {
-    "wiview": "file:../wiview-1.0.0.tgz"
-  },
   "scripts": {
-    "dev": "wiview dev",
-    "build": "wiview build",
-    "preview": "wiview preview",
-    "deploy": "wiview deploy"
+    "dev": "wivex dev",
+    "build": "wivex build",
+    "preview": "wivex preview",
+    "deploy": "wivex deploy"
+  },
+  "dependencies": {
+    "wivex": "file:../wivex-0.1.2.tgz"
   }
 }

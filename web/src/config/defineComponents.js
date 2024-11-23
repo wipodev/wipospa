@@ -8,10 +8,7 @@ import About from "../app/views/about.html";
 
 export const components = {
   TitleLib: { template: TitleLib },
-  DarkToggle: {
-    template: DarkToggle,
-    state: { theme: "sun" },
-  },
+  DarkToggle: { template: DarkToggle, state: { theme: "sun" } },
   HeaderPage: { template: HeaderPage, state: { menu: "" } },
   FooterPage: { template: FooterPage },
   Layout: { template: Layout },

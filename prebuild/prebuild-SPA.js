@@ -24,7 +24,7 @@ export async function prebuildSpa(rootDir, prebuildDir) {
   registerComponent(components);
 
   const copySources = (source) => copy(path.join(rootDir, source), path.join(prebuildDir, source));
-  const libDir = path.join(rootDir, "node_modules/wiview/prebuild/lib");
+  const libDir = path.join(rootDir, "node_modules/wivex/prebuild/lib");
   const copyLib = (source, destination = null) =>
     copy(path.join(libDir, source), path.join(prebuildDir, "lib", destination || source));
 
@@ -63,7 +63,7 @@ function processEntryFile(rootDir) {
 
     let entryFileContent = appContent
       .replace(/^(import\s*{[^}]*?)\bregisterComponent,?\s*/gm, "$1")
-      .replace(/["']wiview["']/g, '"../lib/index.js"');
+      .replace(/["']wivex["']/g, '"../lib/index.js"');
     let match;
 
     while ((match = registerRegex.exec(entryFileContent)) !== null) {

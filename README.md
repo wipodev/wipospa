@@ -1,30 +1,30 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/wipodev/wiview/196dc75c180f8bddd09d4c085070b6213efb2ae0/template/assets/img/logo.svg" alt="wiview logo"/>
+  <img src="https://raw.githubusercontent.com/wipodev/wivex/196dc75c180f8bddd09d4c085070b6213efb2ae0/template/assets/img/logo.svg" alt="wivex logo"/>
 </div>
 
-# W I V I E W
+# W I V E X
 
-`wiview` is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With `wiview`, you can load HTML components, easily manage routes, and inject custom elements into the header of your document, `wiview` uses the power of `Vite` for the build and development process of your application, and `gh-pages` for the deployment of your project on github pages.
+`wivex` is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With `wivex`, you can load HTML components, easily manage routes, and inject custom elements into the header of your document, `wivex` uses the power of `Vite` for the build and development process of your application, and `gh-pages` for the deployment of your project on github pages.
 
-Below is a guide to integrating `wiview` into your project, including how to create components, views, and using useful commands to develop, build, preview, and deploy your application. Below are the steps to create and organize your files, as well as the available commands.
+Below is a guide to integrating `wivex` into your project, including how to create components, views, and using useful commands to develop, build, preview, and deploy your application. Below are the steps to create and organize your files, as well as the available commands.
 
-## Commands available in `wiview`
+## Commands available in `wivex`
 
-`wiview` includes several commands that facilitate the development and deployment flow of your project:
+`wivex` includes several commands that facilitate the development and deployment flow of your project:
 
-- `wiview init`: This command initializes a new `wiview` project in the current folder. It creates the basic file and folder structure needed to get started, including the main layout, folders for views and components, and a configuration file to customize the project. It is ideal for quickly setting up the base environment for a project.
+- `wivex init`: This command initializes a new `wivex` project in the current folder. It creates the basic file and folder structure needed to get started, including the main layout, folders for views and components, and a configuration file to customize the project. It is ideal for quickly setting up the base environment for a project.
 
-- `wiview dev`: Launches a development server that allows you to see changes in real time. Ideal for working interactively on the application.
+- `wivex dev`: Launches a development server that allows you to see changes in real time. Ideal for working interactively on the application.
 
-- `wiview build`: Compiles and minifies JavaScript and CSS files, optimizing them for deployment.
+- `wivex build`: Compiles and minifies JavaScript and CSS files, optimizing them for deployment.
 
-- `wiview preview`: Launches a server with the compiled files to perform a final review before deployment.
+- `wivex preview`: Launches a server with the compiled files to perform a final review before deployment.
 
-- `wiview deploy`: Automatically deploys the project to GitHub Pages. **If you want to deploy to another service, follow the specific instructions for that service for a manual deployment.**
+- `wivex deploy`: Automatically deploys the project to GitHub Pages. **If you want to deploy to another service, follow the specific instructions for that service for a manual deployment.**
 
 ## Installation
 
-To install `wiview` in your project, follow these steps:
+To install `wivex` in your project, follow these steps:
 
 ### 1. **Set up your project**
 
@@ -34,10 +34,10 @@ Create a new Node.js project if you don't have one already:
 npm init -y
 ```
 
-### 2. **Install wiview**
+### 2. **Install wivex**
 
 ```bash
-npm install wiview
+npm install wivex
 ```
 
 ### 3. **Generate a basic project**
@@ -45,12 +45,12 @@ npm install wiview
 Once installed, you can run the `init` command to generate a basic project structure at the root of your directory:
 
 ```bash
-wiview init
+wivex init
 ```
 
 ## Project Structure
 
-The `wiview init` command will create the following folder and file structure:
+The `wivex init` command will create the following folder and file structure:
 
 ```bash
 /my-project
@@ -76,7 +76,7 @@ The `wiview init` command will create the following folder and file structure:
 │   └── app.js                      # Application entry point
 ├── .gitignore
 ├── index.html                      # Main entry page for your project.
-└── wiview.config.js                # Configuration file for wiview.
+└── wivex.config.js                # Configuration file for wivex.
 
 ```
 
@@ -124,24 +124,24 @@ A view represents a specific page or section of your application, such as `home.
 Example of `home.html`:
 
 ```html
-<wiview:head>
-  <title>WiView - JavaScript library for dynamic loading of HTML components</title>
+<wivex:head>
+  <title>wivex - JavaScript library for dynamic loading of HTML components</title>
   <meta
     name="description"
-    content="wiview is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With wiview, you can load HTML components asynchronously, manage routes in a simple way, and inject custom elements into the head of your document."
+    content="wivex is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With wivex, you can load HTML components asynchronously, manage routes in a simple way, and inject custom elements into the head of your document."
   />
-</wiview:head>
+</wivex:head>
 
 <section>
   <img src="/assets/img/logo.svg" alt="logo" />
   <h1>Welcome to Your <TitleLib></TitleLib> App</h1>
   <p>
-    With <strong>wiview</strong>, you can load HTML components asynchronously, manage routes in a simple way, and inject
+    With <strong>wivex</strong>, you can load HTML components asynchronously, manage routes in a simple way, and inject
     custom elements into the head of your document.
   </p>
   <p>
-    For a basic guide on how to use <strong>wiview</strong>, see the
-    <a href="https://github.com/wipodev/wiview">readme</a> on github.
+    For a basic guide on how to use <strong>wivex</strong>, see the
+    <a href="https://github.com/wipodev/wivex">readme</a> on github.
   </p>
 </section>
 
@@ -183,7 +183,7 @@ Components are reusable pieces of the user interface that you can load into diff
 
 ```html
 <script>
-  import { getState, updateState } from "wiview";
+  import { getState, updateState } from "wivex";
 
   document.querySelector("[data-btn-menu]").addEventListener("click", () => {
     const state = getState("HeaderPage");
@@ -229,14 +229,14 @@ Components are reusable pieces of the user interface that you can load into diff
 
 ## They are all components
 
-In wiview everything can be a component and you can integrate any component into any other component, view or layout.
+In wivex everything can be a component and you can integrate any component into any other component, view or layout.
 
 ### child component:
 
 ```html
 <!--DarkToggle-->
 <script>
-  import { getState, updateState } from "wiview";
+  import { getState, updateState } from "wivex";
 
   function toggleTheme() {
     updateState("DarkToggle", { theme: state.theme === "sun" ? "moon" : "sun" });
@@ -286,7 +286,7 @@ Styles are global by default, meaning they can affect any other component. If yo
 
 ## Contributing
 
-Contributions are welcome. If you encounter any problems or have ideas to improve `wiview`, please open an issue in the GitHub repository.
+Contributions are welcome. If you encounter any problems or have ideas to improve `wivex`, please open an issue in the GitHub repository.
 
 ## Icons Attribution
 
@@ -296,7 +296,7 @@ The icons used in this project include both icons from [Font Awesome](https://fo
 
 ### Code License
 
-The code in this project is licensed under the MIT License. - see the [LICENSE](https://github.com/wipodev/wiview/blob/main/LICENCE) file for details.
+The code in this project is licensed under the MIT License. - see the [LICENSE](https://github.com/wipodev/wivex/blob/main/LICENCE) file for details.
 
 ### Icons License
 
@@ -313,4 +313,4 @@ Under the following terms:
 
 ### Logo Usage Restriction
 
-The `WiView` logo is proprietary and created solely for representing this project. It is not covered by the Creative Commons license and may not be used, modified, or distributed outside of this project or for any other purposes without explicit permission.
+The `wivex` logo is proprietary and created solely for representing this project. It is not covered by the Creative Commons license and may not be used, modified, or distributed outside of this project or for any other purposes without explicit permission.

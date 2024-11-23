@@ -1,6 +1,6 @@
-import { registerComponent, Router } from "wiview";
-import { components } from "./app/components/defineComponents.js";
-import { routes } from "./app/views/defineRoutes.js";
+import { registerComponent, Router } from "wivex";
+import { components } from "./config/defineComponents.js";
+import { routes } from "./config/defineRoutes.js";
 
 registerComponent(components);
 const router = Router(routes);

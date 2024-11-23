@@ -1,5 +1,5 @@
 <script>
-  import { getState, updateState } from "wiview"
+  import { getState, updateState } from "wivex"
 
   document.querySelector("[data-btn-menu]").addEventListener("click", () => {
     const state = getState("HeaderPage");
@@ -21,7 +21,7 @@
     <nav>
       <button aria-label="Open menu" class="btn" data-btn-menu><i class="wi wi-bars"></i></button>
       <div class="menu {menu}">
-        <a href="/" aria-label="Go to the beginning">Inicio</a>
+        <a href="/" aria-label="Go to the beginning">Home</a>
         <a href="/about" aria-label="Go to Contact">About</a>
         <DarkToggle></DarkToggle>
       </div>
