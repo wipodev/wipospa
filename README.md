@@ -4,9 +4,9 @@
 
 # W I V I E W
 
-`wiview` is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With `wiview`, you can load HTML components asynchronously, manage routes in a simple way, and inject custom elements into the head of your document.
+`wiview` is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With `wiview`, you can load HTML components, easily manage routes, and inject custom elements into the header of your document, `wiview` uses the power of `Vite` for the build and development process of your application, and `gh-pages` for the deployment of your project on github pages.
 
-Here is a guide to integrating `wiview` into your project, including how to create components, views, and the use of useful commands for developing, building, previewing, and deploying your application. Below are the steps to create and organize your files, as well as the available commands.
+Below is a guide to integrating `wiview` into your project, including how to create components, views, and using useful commands to develop, build, preview, and deploy your application. Below are the steps to create and organize your files, as well as the available commands.
 
 ## Commands available in `wiview`
 
@@ -54,24 +54,29 @@ The `wiview init` command will create the following folder and file structure:
 
 ```bash
 /my-project
-├── app/                        # Main folder for the application.
-│   ├── components/             # Contains the reusable HTML components.
-│   │   ├── Header_Page.html    # Header component template
-│   │   └── Footer_Page.html    # Footer component template
-│   ├── views/                  # Folder for the main views of the application
-│   │   ├── home.html           # Home page view
-│   │   └── contact.html        # View of the contact page
-│   └── Layout.html             # Main layout of the application, where views and components are integrated
-├── assets/                     # Folder for static files, such as images or CSS styles.
-│   ├── img/                    # Folder to store images
-│   │   └── logo.png            # Application logo
-│   └── css/                    # Folder to store custom CSS files
-│       └── styles.css          # CSS file for additional styles
-├── scripts/                    # Configuration and logic scripts.
-│   ├── wiview.js               # wiview main script to load components and views
-│   └── wiview.config.js        # Configuration file for wiview.
-├── app.js                      # Main JavaScript file for the application logic.
-└── index.html                  # Main entry page for your project.
+├── public/                         # Folder for static files, such as images or CSS styles.
+│   └── assets/
+│       └── img/
+│           └── logo.png
+├── src/                            # Main development folder.
+│   ├── app/                        # Main folder for the application.
+│   │   ├── components/             # Contains the reusable HTML components.
+│   │   │   ├── Header_Page.html
+│   │   │   └── Footer_Page.html
+│   │   ├── views/                  # Folder for the main views of the application
+│   │   │   ├── home.html
+│   │   │   └── contact.html
+│   │   └── Layout.html             # Main layout of the application, where views and components are integrated
+│   ├── assets/                     # Folder for CSS or SVG style files that will be processed
+│   │   └── css/
+│   │       └── styles.css
+│   ├── config/                     # Folder for application configuration files
+│   │   ├── defineComponents.js/    # Configuration file to define the project components.
+│   │   └── defineRoutes.js/        # Configuration file to define the project paths.
+│   └── app.js                      # Application entry point
+├── .gitignore
+├── index.html                      # Main entry page for your project.
+└── wiview.config.js                # Configuration file for wiview.
 
 ```
 
@@ -84,69 +89,88 @@ The `layout.html` file acts as the main container for your application. Here you
 `Layout.html` example:
 
 ```html
-<script>
-  import { loadComponent } from "/scripts/wiview.js";
+<HeaderPage></HeaderPage>
 
-  loadComponent({
-    component: "/app/components/Header_Page.html",
-    selector: "header",
-  });
+<main class="container"></main>
 
-  loadComponent({
-    component: "/app/components/Footer_Page.html",
-    selector: "body",
-    replaceContent: false,
-  });
-</script>
-
-<header></header>
-<main></main>
+<FooterPage></FooterPage>
 
 <style>
   body {
-    min-height: 100vh;
+    display: grid;
+    min-height: 100dvh;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      max-width: 100%;
+      padding-inline: 0;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .container {
+      max-width: 1200px;
+    }
   }
 </style>
 ```
 
 ### 2. **Creating and Using Views**
 
-A view represents a specific page or section of your application, such as `contact.html`.
+A view represents a specific page or section of your application, such as `home.html`.
 
-Example of `contact.html`:
+Example of `home.html`:
 
 ```html
-<script>
-  document.querySelector("main > form > input[type=submit]").addEventListener("click", (event) => {
-    event.preventDefault();
-    const name = document.querySelector("main > form input[name=name]").value;
-    const email = document.querySelector("main > form input[name=email]").value;
-    const message = document.querySelector("main > form textarea[name=message]").value;
-    console.log({ name, email, message });
-  });
-</script>
+<wiview:head>
+  <title>WiView - JavaScript library for dynamic loading of HTML components</title>
+  <meta
+    name="description"
+    content="wiview is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With wiview, you can load HTML components asynchronously, manage routes in a simple way, and inject custom elements into the head of your document."
+  />
+</wiview:head>
 
-<h1>Contacto</h1>
-
-<form>
-  <label for="name">
-    Nombre:
-    <input type="text" id="name" name="name" required />
-  </label>
-  <label for="email">
-    Email:
-    <input type="email" id="email" name="email" required />
-  </label>
-  <label for="message">
-    Mensaje:
-    <textarea id="message" name="message" required></textarea>
-  </label>
-  <input type="submit" value="Enviar mensaje" />
-</form>
+<section>
+  <img src="/assets/img/logo.svg" alt="logo" />
+  <h1>Welcome to Your <TitleLib></TitleLib> App</h1>
+  <p>
+    With <strong>wiview</strong>, you can load HTML components asynchronously, manage routes in a simple way, and inject
+    custom elements into the head of your document.
+  </p>
+  <p>
+    For a basic guide on how to use <strong>wiview</strong>, see the
+    <a href="https://github.com/wipodev/wiview">readme</a> on github.
+  </p>
+</section>
 
 <style>
-  h1 {
-    margin-top: var(--pico-spacing);
+  section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding-inline: var(--pico-spacing);
+
+    section img {
+      width: 30%;
+      height: auto;
+    }
+
+    h1 {
+      display: flex;
+      gap: 0.5rem;
+      align-items: baseline;
+
+      span[data-title-lib] {
+        font-size: inherit;
+      }
+    }
+
+    p {
+      text-align: center;
+    }
   }
 </style>
 ```
@@ -159,32 +183,35 @@ Components are reusable pieces of the user interface that you can load into diff
 
 ```html
 <script>
-  function toggleTheme() {
-    const theme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }
+  import { getState, updateState } from "wiview";
 
-  function loadTheme() {
-    const theme = localStorage.getItem("theme");
-    document.documentElement.setAttribute("data-theme", theme ? theme : "light");
-    document.querySelector("body > header nav > a[data-theme-toggle]").addEventListener("click", toggleTheme);
-  }
+  document.querySelector("[data-btn-menu]").addEventListener("click", () => {
+    const state = getState("HeaderPage");
+    updateState("HeaderPage", { menu: state.menu === "open" ? "" : "open" });
+  });
 
-  loadTheme();
+  document.querySelector(".menu").addEventListener("click", () => {
+    const state = getState("HeaderPage");
+    updateState("HeaderPage", { menu: "" });
+  });
 </script>
 
-<div class="container">
-  <a href="/" aria-label="Ir al inicio">
-    <img src="/assets/img/logo.png" alt="Logo" />
-    <span>MATIVELLE</span>
-  </a>
-  <nav>
-    <a href="/">Inicio</a>
-    <a href="/contact">Contacto</a>
-    <a href="#" data-theme-toggle>Modo Oscuro</a>
-  </nav>
-</div>
+<header>
+  <div class="container">
+    <a href="/" aria-label="Go to the beginning">
+      <img src="/assets/img/logo.png" alt="Logo" />
+      <TitleLib></TitleLib>
+    </a>
+    <nav>
+      <button aria-label="Open menu" class="btn" data-btn-menu><i class="wi wi-bars"></i></button>
+      <div class="menu {menu}">
+        <a href="/" aria-label="Go to the beginning">Inicio</a>
+        <a href="/about" aria-label="Go to Contact">About</a>
+        <DarkToggle></DarkToggle>
+      </div>
+    </nav>
+  </div>
+</header>
 
 <style>
   body > header {
@@ -194,28 +221,68 @@ Components are reusable pieces of the user interface that you can load into diff
     padding: 1rem;
     background-color: var(--header-bg-color);
   }
+   {
+    ....;
+  }
 </style>
 ```
 
-## Component Integration
+## They are all components
 
-You can embed any component using `wiview`'s `loadComponent` function into any other component, view or layout
+In wiview everything can be a component and you can integrate any component into any other component, view or layout.
+
+### child component:
 
 ```html
+<!--DarkToggle-->
 <script>
-  import { loadComponent } from "/scripts/wiview.js";
+  import { getState, updateState } from "wiview";
 
-  loadComponent({
-    component: "/app/components/Header_Page.html",
-    selector: "header",
-  });
+  function toggleTheme() {
+    updateState("DarkToggle", { theme: state.theme === "sun" ? "moon" : "sun" });
+  }
+
+  document.querySelector("[data-theme-toggle]").addEventListener("click", toggleTheme);
 </script>
-
-<header></header>
-<main></main>
+<button aria-label="Turn dark mode on or off" class="btn" data-theme-toggle>
+  <i class="wi wi-{theme}"></i>
+  <span>Dark Mode</span>
+</button>
 ```
 
-With this configuration, `wiview` loads the components in the specified location and allows a modular structure for application development.
+### parent component:
+
+```html
+<!--HeaderPage-->
+<header>
+  <div class="container">
+    <nav>
+      <a href="/" aria-label="Go to the beginning">Inicio</a>
+      <a href="/about" aria-label="Go to Contact">About</a>
+      <DarkToggle></DarkToggle>
+      <!--way to insert a component-->
+    </nav>
+  </div>
+</header>
+```
+
+## component styles
+
+Styles are global by default, meaning they can affect any other component. If you want to change this behavior so that the styles only affect the component you are creating, you must place the "escoped" attribute in the style tag of the component.
+
+```css
+<style scoped>
+  footer {
+    background-color: var(--pico-background-color);
+    padding: 0 0 1rem;
+    text-align: center;
+
+    hr {
+      margin-block: 0 0.5rem;
+    }
+  }
+</style>
+```
 
 ## Contributing
 
