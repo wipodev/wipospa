@@ -9,17 +9,17 @@ export function init(options) {
   const root = options.root || ".";
 
   try {
-    copy("../template", root);
+    copy("node_modules/wivex/template", root);
     console.log("Template copied successfully.");
 
     if (fs.existsSync(packageJsonPath)) {
       const pkg = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
       pkg.scripts = {
         ...pkg.scripts,
-        dev: pkg.scripts.dev || "wivex dev",
-        build: pkg.scripts.build || "wivex build",
-        preview: pkg.scripts.preview || "wivex preview",
-        deploy: pkg.scripts.deploy || "wivex deploy",
+        dev: pkg.scripts.dev || `wivex dev ${options.root ? `-r ${options.root}` : ""}`,
+        build: pkg.scripts.build || `wivex build ${options.root ? `-r ${options.root}` : ""}`,
+        preview: pkg.scripts.preview || `wivex preview ${options.root ? `-r ${options.root}` : ""}`,
+        deploy: pkg.scripts.deploy || `wivex deploy ${options.root ? `-r ${options.root}` : ""}`,
       };
       fs.writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2), "utf8");
       console.log("package.json updated with new scripts.");

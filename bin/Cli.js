@@ -17,7 +17,7 @@ program
   .command("init")
   .description("Initialize a project with a base template")
   .option("-r, --root <root>", "Root directory for the project")
-  .action(init);
+  .action((options) => init(options));
 
 program
   .command("dev")
@@ -40,7 +40,7 @@ program
   .command("preview")
   .description("Preview the project in the browser")
   .option("-r, --root <root>", "Root directory for the project")
-  .action(previewer);
+  .action((options) => previewer(options));
 
 program
   .command("deploy")

@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 export function getVersion() {
-  return JSON.parse(fs.readFileSync("../package.json", "utf8")).version;
+  return JSON.parse(fs.readFileSync(path.join(process.cwd(), "node_modules/wivex/package.json"), "utf8")).version;
 }
 
 export function move(source, destination, replace = true) {
