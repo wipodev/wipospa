@@ -10,6 +10,7 @@ import fs from "fs";
  * @returns {import("vite").Plugin} Vite plugin.
  */
 export function replaceWivexImports() {
+  const root = path.posix.join(process.cwd().replace(/\\/g, "/"), "node_modules/.vite/deps/wivex.js");
   return {
     name: "replace-wivex-import",
     apply: "serve",
@@ -21,7 +22,7 @@ export function replaceWivexImports() {
           const jsonData = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
           modifiedCode = code.replace(
             /import\s+{([^}]+)}\s+from\s+['"]wivex['"]/g,
-            `import { $1 } from '/node_modules/.vite/deps/wivex.js?v=${jsonData.browserHash}'`
+            `import { $1 } from '/@fs/${root}?v=${jsonData.browserHash}'`
           );
         }
 
