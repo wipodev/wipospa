@@ -1,7 +1,7 @@
 import fs from "fs";
 import http from "http";
 import { createServer } from "vite";
-import { replaceWivexImports } from "wivex/plugin";
+import { WivexCompiler } from "wivex/plugin";
 import { getConfig } from "./utils.js";
 
 export async function dev(options) {
@@ -15,7 +15,12 @@ export async function dev(options) {
   try {
     const server = await createServer({
       root: finalOptions.root,
-      plugins: [replaceWivexImports()],
+      plugins: [WivexCompiler()],
+      resolve: {
+        alias: {
+          "@components": `${finalOptions.root}/src/app/components/`,
+        },
+      },
       server: {
         port: finalOptions.port,
       },

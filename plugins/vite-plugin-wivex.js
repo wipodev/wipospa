@@ -1,34 +1,14 @@
 import fs from "fs";
+import compileComponent from "../lib/compileComponents.js";
 
-/**
- * Vite plugin to replace 'import { ... } from "wivex"' to
- * 'import { ... } from "/node_modules/.vite/deps/wivex.js?v=<browserHash>"'
- * in HTML files, and wrap the code with 'export default `<code>`'.
- * This is necessary because Vite's built-in HTML plugin does not support
- * imports in HTML files.
- *
- * @returns {import("vite").Plugin} Vite plugin.
- */
-export function replaceWivexImports() {
+export function WivexCompiler() {
   const root = path.posix.join(process.cwd().replace(/\\/g, "/"), "node_modules/.vite/deps/wivex.js");
   return {
-    name: "replace-wivex-import",
+    name: "wivex-compiler",
     apply: "serve",
     transform(code, id) {
       if (id.endsWith(".html")) {
-        const jsonPath = "./node_modules/.vite/deps/_metadata.json";
-        let modifiedCode;
-        if (fs.existsSync(jsonPath)) {
-          const jsonData = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
-          modifiedCode = code.replace(
-            /import\s+{([^}]+)}\s+from\s+['"]wivex['"]/g,
-            `import { $1 } from '/@fs/${root}?v=${jsonData.browserHash}'`
-          );
-        }
-
-        const exportTemplate = `
-            export default \`${modifiedCode}\`;
-          `;
+        const compiledCode = compileComponent(code);
 
         const map = {
           version: 3,
@@ -40,7 +20,7 @@ export function replaceWivexImports() {
         };
 
         return {
-          code: exportTemplate,
+          code: compiledCode,
           map: map,
         };
       }
