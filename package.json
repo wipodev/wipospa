@@ -28,6 +28,7 @@
   },
   "scripts": {
     "dev": "vite sandbox --host",
+    "tests": "node tests/index.js",
     "build": "vite build"
   },
   "dependencies": {
