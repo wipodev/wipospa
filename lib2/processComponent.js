@@ -28,7 +28,7 @@ export default function componentProcessor(component, componentName) {
     .map((i, el) => elementProcessor($, el, i, container, resolveReactiveKey, getName))
     .get()
     .join("\n");
-  return templateContent;
+  return { templateContent, scriptContent, headContent, styleContent, container };
 }
 
 function preprocessComponent(component) {
