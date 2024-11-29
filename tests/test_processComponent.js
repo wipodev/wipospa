@@ -96,7 +96,7 @@ export default function runTestCases(compilerFunction) {
 
   Object.entries(testCases).forEach(([key, input]) => {
     console.log(`Running ${key}...`);
-    const output = compilerFunction(input.trim(), key);
+    const output = compilerFunction(input.trim(), key).templateContent;
     const expectedOutput = expectedOutputs[key].trim();
 
     if (normalizeString(output) !== normalizeString(expectedOutput)) {
