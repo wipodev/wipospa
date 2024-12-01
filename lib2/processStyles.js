@@ -1,53 +1,47 @@
 import * as cheerio from "cheerio";
 
 /**
- * Extracts style tags and their contents from a template, and scopes their selectors
+ * Processes style tags and their contents from a template, and scopes their selectors
  * to the first element in the template, if the style tag has the "scoped" attribute.
  * If the style tag does not have the "scoped" attribute, it is removed from the
  * template and its contents are returned as a string.
  *
  * @param {string} component - The template to process
- * @returns {Object} An object containing the processed template and the extracted
- * style content, if any.
+ * @returns {Object} An object containing the processed style content and the indexes
+ * of the style tags in the original component string.
  */
 export function styleProcessor(component) {
   const $ = cheerio.load(component);
-  let styleContent = null;
-
   const firstElement = $("body").children().first();
-  const styles = $("style");
+  const fullStyle = $("style").toString();
+  const rootStyles = $("style");
+  let styles = rootStyles.html();
 
-  if (styles.length === 0) {
-    return { templateWithoutStyle: component, styleContent };
-  }
+  if (rootStyles.length === 0) return styles;
 
-  if (firstElement.length > 0 && styles.attr("scoped") !== undefined) {
+  const startIndex = component.indexOf(fullStyle);
+  const endIndex = startIndex + fullStyle.length;
+  const indexes = { start: startIndex, end: endIndex };
+
+  if (firstElement.length > 0 && rootStyles.attr("scoped") !== undefined) {
     const tagName = firstElement[0].tagName.toLowerCase();
     const id = firstElement.attr("id") ? `#${firstElement.attr("id")}` : "";
-
-    let style = styles.html();
-
+    const classList = firstElement.attr("class") ? firstElement.attr("class").split(" ") : [];
     const tagRegex = new RegExp(`(^|\\s|,)${tagName}(\\s|\\{|\\[|,|:|>|~|\\+)`, "g");
     const idRegex = id ? new RegExp(`(^|\\s|,)${id}(\\s|\\{|\\[|,|:|>|~|\\+)`, "g") : null;
 
-    style = style.replace(tagRegex, (match, p1, p2) => `${p1}:scope${p2}`);
-    if (idRegex) style = style.replace(idRegex, (match, p1, p2) => `${p1}&${id}${p2}`);
+    styles = styles.replace(tagRegex, (_, p1, p2) => `${p1}:scope${p2}`);
+    if (idRegex) styles = styles.replace(idRegex, (_, p1, p2) => `${p1}&${id}${p2}`);
 
-    const classList = firstElement.attr("class") ? firstElement.attr("class").split(" ") : [];
     if (classList.length > 0) {
       for (const className of classList) {
         const classRegex = new RegExp(`(^|\\s|,).${className}(\\s|\\{|\\[|,|:|>|~|\\+)`, "g");
-        style = style.replace(classRegex, (match, p1, p2) => `${p1}&.${className}${p2}`);
+        styles = styles.replace(classRegex, (_, p1, p2) => `${p1}&.${className}${p2}`);
       }
     }
 
-    styles.html(`@scope { ${style} }`);
-    firstElement.append(styles);
-    styles.removeAttr("scoped");
-  } else {
-    styleContent = styles.html();
-    styles.remove();
+    styles = `@scope { ${styles} }`;
   }
 
-  return { templateWithoutStyle: $("body").html(), styleContent };
+  return { styles, indexes };
 }
