@@ -28,13 +28,14 @@
   },
   "scripts": {
     "dev": "vite sandbox --host",
-    "tests": "node tests/index.js",
+    "tests": "witests",
     "build": "vite build"
   },
   "dependencies": {
     "cheerio": "^1.0.0",
     "commander": "^12.1.0",
     "gh-pages": "^6.2.0",
+    "magic-string": "^0.30.14",
     "vite": "^5.4.10"
   },
   "keywords": [
@@ -52,5 +53,8 @@
     "template"
   ],
   "author": "wipodev",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "witests": "^0.0.1"
+  }
 }
