@@ -47,7 +47,7 @@ class ${componentName} {
     if (!document.querySelector(\`style[data-style-for="${componentName}"]\`)) {
       const style = document.createElement("style");
       style.setAttribute("data-style-for", "${componentName}");
-      style.textContent = \`${component.styleContent}\`;
+      style.textContent = \`${component.styleContent.styles}\`;
       document.head.appendChild(style);
     }
   }

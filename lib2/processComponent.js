@@ -32,10 +32,15 @@ export default function componentProcessor(component, componentName) {
 }
 
 function preprocessComponent(component) {
-  const { templateWithoutHead, headContent } = headProcessor(component);
-  const { templateWithoutScript, scriptContent } = scriptProcessor(templateWithoutHead);
-  const { templateWithoutStyle, styleContent } = styleProcessor(templateWithoutScript);
-  const preProcessedTemplate = templateWithoutStyle;
+  const headContent = headProcessor(component);
+  const scriptContent = scriptProcessor(component);
+  const styleContent = styleProcessor(component);
+
+  const $ = cheerio.load(component);
+  $("wivex\\:head").remove();
+  $("script").remove();
+  $("style").remove();
+  const preProcessedTemplate = $.html();
 
   return {
     preProcessedTemplate,
