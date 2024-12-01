@@ -1,126 +1,22 @@
-function normalizeString(str) {
-  return str.replace(/\s+/g, " ").trim();
-}
+export function getTestCases() {
+  const witestsCases = {};
 
-function diff2(str1, str2, head = "Differences in the test") {
-  const lines1 = str1.split("\n");
-  const lines2 = str2.split("\n");
-
-  const yellowColor = "\x1b[33m";
-  const greenColor = "\x1b[32m";
-  const redColor = "\x1b[31m";
-  const blueColor = "\x1b[34m";
-  const reset = "\x1b[0m";
-
-  const map1 = new Map(lines1.map((line, index) => [line, index]));
-  const map2 = new Map(lines2.map((line, index) => [line, index]));
-
-  const diffReceived = [];
-  const difference = [];
-
-  let i = 0;
-  let j = 0;
-
-  while (i < lines1.length || j < lines2.length) {
-    const line1 = lines1[i] || "";
-    const line2 = lines2[j] || "";
-    const pos1 = map1.get(line2);
-
-    if (line1 === line2 && pos1 === j) {
-      diffReceived.push(`  ${line1}`);
-      i++;
-      j++;
-    } else if (!map1.has(line2)) {
-      if (line2) {
-        diffReceived.push(`${greenColor}+ ${line2}${reset}`);
-        difference.push(`${blueColor}Added line: ${i + 1}${reset}`);
-        difference.push(`${greenColor}+ ${line2}${reset}`);
-      } else {
-        diffReceived.push(line2);
-      }
-      j++;
-    } else if (!map2.has(line1)) {
-      if (line2) {
-        diffReceived.push(`${redColor}- ${line1}${reset}`);
-        difference.push(`${blueColor}Removed line: ${i + 1}${reset}`);
-        difference.push(`${redColor}- ${line1}${reset}`);
-      } else {
-        diffReceived.push(line2);
-      }
-      i++;
+  Object.entries(testCases).forEach(([caseName, input]) => {
+    const expected = expectedOutputs[caseName];
+    if (expected !== undefined) {
+      witestsCases[caseName] = { input: [input, caseName], expected };
     } else {
-      if (j < pos1) {
-        if (line2) {
-          diffReceived.push(`${yellowColor}↑ ${line2}${reset}`);
-          difference.push(`${blueColor}Moved line: ${pos1 + 1} to ${j + 1}${reset}`);
-          difference.push(`${yellowColor}↑ ${line2}${reset}`);
-        } else {
-          diffReceived.push(line2);
-        }
-        j++;
-        if (line1 === line2) i++;
-      } else if (j > pos1) {
-        if (line2) {
-          diffReceived.push(`${yellowColor}↓ ${line2}${reset}`);
-          difference.push(`${blueColor}Moved line: ${pos1 + 1} to ${j + 1}${reset}`);
-          difference.push(`${yellowColor}↓ ${line2}${reset}`);
-        } else {
-          diffReceived.push(line2);
-        }
-        j++;
-        if (line1 === line2) i++;
-      } else {
-        i++;
-      }
-    }
-  }
-
-  const output = `${redColor}${head}${reset}
-
-${yellowColor}Expected:${reset}
-${blueColor}${str1}${reset}
-
-${yellowColor}Received:${reset}
-${diffReceived.join("\n")}
-
-${yellowColor}Difference:${reset}
-${difference.join("\n")}
-`;
-
-  return output;
-}
-
-export default function runTestCases(compilerFunction) {
-  let allTestsPassed = true;
-  let passedTests = 0;
-
-  Object.entries(testCases).forEach(([key, input]) => {
-    console.log(`Running ${key}...`);
-    const output = compilerFunction(input.trim(), key).templateContent;
-    const expectedOutput = expectedOutputs[key].trim();
-
-    if (normalizeString(output) !== normalizeString(expectedOutput)) {
-      console.log(diff2(expectedOutput, output, `Test ${key} failed!`));
-      allTestsPassed = false;
-    } else {
-      passedTests++;
-      console.info(`\x1b[32mTestTest ${key} passed! ✔️\x1b[0m`);
+      console.warn(`No expected output for case: ${caseName}`);
     }
   });
 
-  if (allTestsPassed) {
-    console.info("\x1b[32mAll tests passed! 🎉\x1b[0m");
-  } else {
-    console.info(`\x1b[32m${passedTests} test passed.\x1b[0m`);
-    console.error(`${Object.keys(testCases).length - passedTests} failed tests`);
-    console.info("Some tests failed. See above for details.");
-  }
+  return witestsCases;
 }
 
 const testCases = {
   case1: /*html*/ `
 <section>
-  <div></div>
+  <div>a</div>
   <span></span>
 </section>
 `,
@@ -699,3 +595,5 @@ div2.appendChild(p0);
 section.appendChild(div2);
 }`,
 };
+
+//console.log(getTestCases());
