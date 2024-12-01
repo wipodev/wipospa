@@ -1,38 +1,51 @@
-import * as cheerio from "cheerio";
-
-export function scriptProcessor(html) {
+export function scriptProcessor(stringCode) {
   const scriptContent = {
     imports: "",
     state: {},
     props: {},
     methods: {},
+    indexes: {
+      imports: {},
+      state: [],
+      props: [],
+      methods: [],
+    },
   };
   const importRegex = /import\s+[^;]+;?/g;
   const stateRegex = /let\s+(\w+)\s*(?:=\s*([^;]+))?\s*;?/g;
   const propsRegex = /var\s+(\w+)\s*(?:=\s*([^;]+))?\s*;?/g;
-  const functionRegex = /function\s+(\w+)\s*\((.*?)\)\s*\{([\s\S]*?)\}/g;
-  const functionRegex2 =
+  const functionRegex =
     /(?:function\s+(\w+)\s*\(.*?\)\s*\{[\s\S]*?\}|const\s+(\w+)\s*=\s*\(.*?\)\s*=>\s*\{[\s\S]*?\})/g;
-
-  const $ = cheerio.load(html);
-  const stringCode = $("script").html();
-  $("script").remove();
-  const templateWithoutScript = $.html();
 
   if (stringCode) {
     let match;
     while ((match = importRegex.exec(stringCode))) {
+      if (!scriptContent.imports) scriptContent.indexes.imports.start = match.index;
       scriptContent.imports += `${match}\n`;
+      scriptContent.indexes.imports.end = match.index + match[0].length;
     }
+
     while ((match = stateRegex.exec(stringCode))) {
       const [, stateName, stateValue] = match;
       scriptContent.state[stateName] = stateValue || "";
+      scriptContent.indexes.state.push({
+        name: stateName,
+        start: match.index,
+        end: stateRegex.lastIndex,
+      });
     }
+
     while ((match = propsRegex.exec(stringCode))) {
       const [, propName, propValue] = match;
       scriptContent.props[propName] = propValue || "";
+      scriptContent.indexes.props.push({
+        name: propName,
+        start: match.index,
+        end: propsRegex.lastIndex,
+      });
     }
-    while ((match = functionRegex2.exec(stringCode))) {
+
+    while ((match = functionRegex.exec(stringCode))) {
       const fullFunc = match[0];
       const name = match[1] || match[2];
 
@@ -47,8 +60,13 @@ export function scriptProcessor(html) {
       }, fullFunc);
 
       scriptContent.methods[name] = updatedFunc;
+      scriptContent.indexes.methods.push({
+        name,
+        start: match.index,
+        end: functionRegex.lastIndex,
+      });
     }
   }
 
-  return { templateWithoutScript, scriptContent };
+  return scriptContent;
 }
