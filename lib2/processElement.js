@@ -42,7 +42,7 @@ function processTextContent(tagName, index, innerHTML, resolveReactiveKey) {
       )}\`;\n`;
     }
   } else {
-    return `${tagName}${index}.textContent = "${innerHTML.trim()}";\n`;
+    return `${tagName}${index}.textContent = "${innerHTML}";\n`;
   }
 }
 
@@ -51,6 +51,11 @@ function processInnerHTML(tagName, index, innerHTML, resolveReactiveKey, getName
   if (innerHTML.includes("<")) {
     const $ = cheerio.load(innerHTML);
     const rootChild = $("body").children();
+    const textContent = $("body")
+      .contents()
+      .filter((_, el) => el.type === "text")
+      .text();
+    innerHTMLCode += textContent.trim() ? processTextContent(tagName, index, textContent, resolveReactiveKey) : "";
     innerHTMLCode += rootChild
       .map((i, el) => elementProcessor($, el, i, `${tagName}${index}`, resolveReactiveKey, getName))
       .get()
