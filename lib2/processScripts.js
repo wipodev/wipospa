@@ -15,7 +15,7 @@ export function scriptProcessor(stringCode) {
   const stateRegex = /let\s+(\w+)\s*(?:=\s*([^;]+))?\s*;?/g;
   const propsRegex = /var\s+(\w+)\s*(?:=\s*([^;]+))?\s*;?/g;
   const functionRegex =
-    /(?:function\s+(\w+)\s*\(.*?\)\s*\{[\s\S]*?\}|const\s+(\w+)\s*=\s*\(.*?\)\s*=>\s*\{[\s\S]*?\})/g;
+    /(?:function\s+(\w+)\s*\((.*?)\)\s*\{([\s\S]*?)\}|const\s+(\w+)\s*=\s*\((.*?)\)\s*=>\s*\{([\s\S]*?)\})/g;
 
   if (stringCode) {
     let match;
@@ -46,20 +46,23 @@ export function scriptProcessor(stringCode) {
     }
 
     while ((match = functionRegex.exec(stringCode))) {
-      const fullFunc = match[0];
-      const name = match[1] || match[2];
+      const name = match[1] || match[4];
+      const params = match[2] || match[5] || "";
+      const body = match[3] || match[6];
 
       if (!name) continue;
 
-      const updatedFunc = [
+      const updatedBody = [
         ...Object.entries(scriptContent.state).map(([key]) => [key, "state"]),
         ...Object.entries(scriptContent.props).map(([key]) => [key, "props"]),
       ].reduce((func, [key, prefix]) => {
         const regex = new RegExp(`\\b${key}\\b`, "g");
-        return func.replace(regex, `${prefix}.${key}`);
-      }, fullFunc);
+        return func.replace(regex, `this.${prefix}.${key}`);
+      }, body);
 
-      scriptContent.methods[name] = updatedFunc;
+      const classMethod = `${name}(${params}) { ${updatedBody} }`;
+
+      scriptContent.methods[name] = classMethod;
       scriptContent.indexes.methods.push({
         name,
         start: match.index,
