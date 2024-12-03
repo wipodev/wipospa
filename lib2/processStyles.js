@@ -15,10 +15,11 @@ export function styleProcessor(component) {
   const firstElement = $("body").children().first();
   const fullStyle = $("style").toString();
   const rootStyles = $("style");
-  let styles = rootStyles.html();
+  let styles = "";
 
   if (rootStyles.length === 0) return styles;
 
+  styles = rootStyles.html();
   const startIndex = component.indexOf(fullStyle);
   const endIndex = startIndex + fullStyle.length;
   const indexes = { start: startIndex, end: endIndex };
