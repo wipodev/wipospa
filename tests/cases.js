@@ -4,7 +4,23 @@ export function getTestCases() {
   Object.entries(testCases).forEach(([caseName, input]) => {
     const expected = expectedOutputs[caseName];
     if (expected !== undefined) {
-      witestsCases[caseName] = { input: [input, caseName], expected };
+      witestsCases[caseName] = { input: [input, caseName], expected: expected.templateContent };
+    } else {
+      console.warn(`No expected output for case: ${caseName}`);
+    }
+  });
+
+  return witestsCases;
+}
+
+export function getFullTestCases() {
+  const witestsCases = {};
+
+  Object.entries(testCases).forEach(([caseName, input]) => {
+    const expected = expectedOutputs[caseName];
+    if (expected !== undefined) {
+      const fullExpected = getBase({ componentName: caseName, ...expected });
+      witestsCases[caseName] = { input: [input, caseName], expected: fullExpected };
     } else {
       console.warn(`No expected output for case: ${caseName}`);
     }
@@ -16,7 +32,7 @@ export function getTestCases() {
 const testCases = {
   case1: /*html*/ `
 <section>
-  <div>a</div>
+  <div></div>
   <span></span>
 </section>
 `,
@@ -31,8 +47,8 @@ const testCases = {
 
   function increment() {
     count++;
-    console.log(count)
-  }
+    console.log(count);
+  };
 </script>
 
 <section>
@@ -283,10 +299,33 @@ const testCases = {
   </div>
 </section>
 `,
+  case19: /*html*/ `
+<script>
+  let count = 0;
+  function increment() {
+    count++;
+  }
+</script>
+
+<article>
+  <h1>Este es el <strong>Contador</strong></h1>
+  <button onclick="increment()">Incrementar</button>
+  <p>Contador: {count}</p>
+</article>
+`,
 };
 
 const expectedOutputs = {
-  case1: `const section = document.createElement("section");
+  case1: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case1-\${this.id}\`);
 
 const div0 = document.createElement("div");
@@ -294,7 +333,22 @@ section.appendChild(div0);
 
 const span1 = document.createElement("span");
 section.appendChild(span1);`,
-  case2: `const section = document.createElement("section");
+  },
+  case2: {
+    imports: `import Hijo from "/src/app/components/Hijo.html";`,
+    props: `titulo: "", boton: ""`,
+    state: `this.defineReactiveProperty(this.state, "count", 0);
+this.defineReactiveProperty(this.state, "names", ["pepe", "paco", "luis", "jose", "wladimir"]);`,
+    subscriptions: `this.subscriptions.count.push(() => this.render());
+this.subscriptions.names.push(() => this.render());`,
+    bindMethods: `this.increment = this.increment.bind(this);`,
+    styles: ``,
+    methods: `increment() {
+  this.state.count++;
+  console.log(this.state.count);
+};`,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case2-\${this.id}\`);
 
 const h10 = document.createElement("h1");
@@ -323,9 +377,9 @@ this.state.names.forEach((name) => {
 
 const ul5 = document.createElement("ul");
 this.state.names.forEach((name) => {
-  const li0 = document.createElement("li");
-  li0.textContent = name;
-  ul5.appendChild(li0);
+const li0 = document.createElement("li");
+li0.textContent = name;
+ul5.appendChild(li0);
 });
 section.appendChild(ul5);
 
@@ -348,7 +402,19 @@ footer2.appendChild(p0);
 article6.appendChild(footer2);
 section.appendChild(article6);
 });`,
-  case3: `const section = document.createElement("section");
+  },
+  case3: {
+    imports: ``,
+    props: ``,
+    state: `this.defineReactiveProperty(this.state, "isLoggedIn", false);
+this.defineReactiveProperty(this.state, "user", { name: "Juan Pérez" });`,
+    subscriptions: `this.subscriptions.isLoggedIn.push(() => this.render());
+this.subscriptions.user.push(() => this.render());`,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case3-\${this.id}\`);
 
 if (this.state.isLoggedIn) {
@@ -366,14 +432,36 @@ p0.textContent = "Por favor, inicia sesión";
 div1.appendChild(p0);
 section.appendChild(div1);
 }`,
-  case4: `const section = document.createElement("section");
+  },
+  case4: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: `this.customEventHandler = this.customEventHandler.bind(this);`,
+    styles: ``,
+    methods: `customEventHandler() {
+    alert("Evento personalizado disparado");
+  };`,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case4-\${this.id}\`);
 
 const button0 = document.createElement("button");
 button0.textContent = "Haz clic en mí";
 button0.oncustom = this.customEventHandler;
 section.appendChild(button0);`,
-  case5: `const section = document.createElement("section");
+  },
+  case5: {
+    imports: ``,
+    props: ``,
+    state: `this.defineReactiveProperty(this.state, "items", ["item1", "item2", "item3"]);`,
+    subscriptions: `this.subscriptions.items.push(() => this.render());`,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case5-\${this.id}\`);
 
 const ul0 = document.createElement("ul");
@@ -383,7 +471,17 @@ this.state.items.forEach((item) => {
   ul0.appendChild(li0);
 });
 section.appendChild(ul0);`,
-  case6: `const section = document.createElement("section");
+  },
+  case6: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case6-\${this.id}\`);
 
 if (this.state.imageUrl) {
@@ -396,14 +494,34 @@ section.appendChild(img0);
 const p1 = document.createElement("p");
 p1.textContent = this.state.description;
 section.appendChild(p1);`,
-  case7: `const section = document.createElement("section");
+  },
+  case7: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case7-\${this.id}\`);
 
 const h10 = document.createElement("h1");
 h10.textContent = this.state.title;
 h10.setAttribute("class", this.state.dynamicClasses);
 section.appendChild(h10);`,
-  case8: `const section = document.createElement("section");
+  },
+  case8: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case8-\${this.id}\`);
 
 this.state.data.forEach((item) => {
@@ -417,7 +535,17 @@ p1.textContent = \`Valor: \${item.value}\`;
 div0.appendChild(p1);
 section.appendChild(div0);
 });`,
-  case9: `const section = document.createElement("section");
+  },
+  case9: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case9-\${this.id}\`);
 
 const button0 = document.createElement("button");
@@ -438,7 +566,17 @@ div1.appendChild(button1);
 div1.setAttribute("class", "modal");
 section.appendChild(div1);
 }`,
-  case10: `const section = document.createElement("section");
+  },
+  case10: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case10-\${this.id}\`);
 
 const ul0 = document.createElement("ul");
@@ -457,7 +595,17 @@ const p1 = document.createElement("p");
 p1.textContent = \`Color seleccionado: \${this.state.selectedColor}\`;
 section.appendChild(p1);
 }`,
-  case11: `const section = document.createElement("section");
+  },
+  case11: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case11-\${this.id}\`);
 
 const p0 = document.createElement("p");
@@ -471,7 +619,17 @@ p0.textContent = "Contenido visible solo para usuarios con permiso.";
 div1.appendChild(p0);
 section.appendChild(div1);
 }`,
-  case12: `const section = document.createElement("section");
+  },
+  case12: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case12-\${this.id}\`);
 
 this.state.articles.forEach((article) => {
@@ -485,7 +643,17 @@ p1.textContent = article.body;
 article0.appendChild(p1);
 section.appendChild(article0);
 });`,
-  case13: `const section = document.createElement("section");
+  },
+  case13: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case13-\${this.id}\`);
 
 const input0 = document.createElement("input");
@@ -497,7 +665,17 @@ section.appendChild(input0);
 const p1 = document.createElement("p");
 p1.textContent = \`Valor ingresado: \${this.state.inputValue}\`;
 section.appendChild(p1);`,
-  case14: `const section = document.createElement("section");
+  },
+  case14: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case14-\${this.id}\`);
 
 if (this.state.isLoading) {
@@ -515,7 +693,17 @@ p0.textContent = "Contenido cargado.";
 div1.appendChild(p0);
 section.appendChild(div1);
 }`,
-  case15: `const section = document.createElement("section");
+  },
+  case15: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case15-\${this.id}\`);
 
 const div0 = document.createElement("div");
@@ -526,7 +714,17 @@ section.appendChild(div0);
 const p1 = document.createElement("p");
 p1.textContent = \`Progreso: \${this.state.progress} %\`;
 section.appendChild(p1);`,
-  case16: `const section = document.createElement("section");
+  },
+  case16: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case16-\${this.id}\`);
 
 const h10 = document.createElement("h1");
@@ -540,7 +738,17 @@ section.appendChild(p1);
 const p2 = document.createElement("p");
 p2.textContent = \`Ocupación: \${this.state.userProfile.occupation}\`;
 section.appendChild(p2);`,
-  case17: `const section = document.createElement("section");
+  },
+  case17: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case17-\${this.id}\`);
 
 const ul0 = document.createElement("ul");
@@ -558,7 +766,17 @@ this.state.list.forEach((item) => {
   ul0.appendChild(li0);
 });
 section.appendChild(ul0);`,
-  case18: `const section = document.createElement("section");
+  },
+  case18: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `section`,
+    templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case18-\${this.id}\`);
 
 if (this.state.step === 1) {
@@ -594,6 +812,139 @@ p0.textContent = "Formulario completado.";
 div2.appendChild(p0);
 section.appendChild(div2);
 }`,
+  },
+  case19: {
+    imports: ``,
+    props: ``,
+    state: ``,
+    subscriptions: ``,
+    bindMethods: ``,
+    styles: ``,
+    methods: ``,
+    container: `article`,
+    templateContent: `const article = document.createElement("article");
+article.setAttribute("data-component-id", \`case19-\${this.id}\`);
+
+const h10 = document.createElement("h1");
+h10.textContent = "Este es el ";
+const strong0 = document.createElement("strong");
+strong0.textContent = "Contador";
+h10.appendChild(strong0);
+article.appendChild(h10);
+
+const button1 = document.createElement("button");
+button1.textContent = "Incrementar";
+button1.onclick = this.increment;
+article.appendChild(button1);
+
+const p2 = document.createElement("p");
+p2.textContent = \`Contador: \${this.state.count}\`;
+article.appendChild(p2);`,
+  },
 };
 
-//console.log(getTestCases());
+function getBase({
+  componentName,
+  imports,
+  props,
+  state,
+  subscriptions,
+  bindMethods,
+  styles,
+  methods,
+  templateContent,
+  container,
+}) {
+  const styleContent = styles
+    ? `ensureStyles() {
+    if (!document.querySelector(\`style[data-style-for="${componentName}"]\`)) {
+      const style = document.createElement("style");
+      style.setAttribute("data-style-for", "${componentName}");
+      style.textContent = \`${styles}\`;
+      document.head.appendChild(style);
+    }
+  }`
+    : "";
+
+  return `${imports}
+
+class ${componentName} {
+  constructor(props = {}) {
+    this.id = Math.random().toString(36).substring(2, 9);
+    this.props = { ${props}, ...props};
+    this.subscriptions = {};
+    this.state = {};
+    ${state}
+    ${subscriptions}
+    ${bindMethods}
+    this.ensureStyles();
+  }
+
+  defineReactiveProperty(obj, key, initialValue) {
+    let value = initialValue;
+    this.subscriptions[key] = [];
+    Object.defineProperty(obj, key, {
+      get: () => value,
+      set: (newValue) => {
+        value = newValue;
+        this.subscriptions[key].forEach((callback) => callback());
+      },
+    });
+  }
+
+  ${styleContent}
+
+  ${methods}
+
+  updateComponent(currentRender, newRender) {
+    if (!currentRender || !newRender) return;
+
+    const currentChildren = Array.from(currentRender.childNodes);
+    const newChildren = Array.from(newRender.childNodes);
+
+    newChildren.forEach((newChild, index) => {
+      if (!newChild.hasAttribute("data-component-id")) {
+        const currentChild = currentChildren[index];
+
+        if (currentChild && currentChild.isEqualNode(newChild)) {
+          return;
+        }
+
+        const existingNode = currentChildren.find((child) => child.isEqualNode(newChild));
+        if (existingNode) {
+          currentRender.insertBefore(existingNode, currentChild || null);
+        } else {
+          currentRender.insertBefore(newChild.cloneNode(true), currentChild || null);
+        }
+      }
+    });
+
+    currentChildren.forEach((currentChild) => {
+      if (!currentChild.hasAttribute("data-component-id")) {
+        if (!newChildren.some((newChild) => newChild.isEqualNode(currentChild))) {
+          currentRender.removeChild(currentChild);
+        }
+      }
+    });
+  }
+
+  render(container = null) {
+    ${templateContent}
+
+    if (container) {
+      container.appendChild(${container});
+    } else {
+      const el = document.querySelector(\`[data-component-id="${componentName}-\${this.id}"]\`);
+      this.updateComponent(el, ${container});
+    }
+
+    return ${container};
+  }
+
+  mount(container) {
+    this.render(container);
+  }
+}
+
+export default ${componentName};`;
+}
