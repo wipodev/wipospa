@@ -5,20 +5,40 @@ export function compileComponent(sourceCode, filePath) {
   const componentName = path.basename(filePath, ".html").replace(/[-_]/g, "");
   const component = componentProcessor(sourceCode, componentName);
 
-  const props = component.scriptContent.props.map(([key, value]) => `${key}: ${value}`).join(", ");
-  const state = component.scriptContent.state
-    .map(([key, value]) => `this.defineReactiveProperty(this.state, "${key}", ${value});`)
+  const props = Object.entries(component.scriptContent.props)
+    .map(([key, value]) => {
+      const valueExpression = value ? value : `""`;
+      return `${key}: ${valueExpression}`;
+    })
+    .join(", ");
+  const state = Object.entries(component.scriptContent.state)
+    .map(([key, value]) => {
+      const valueExpression = value ? value : `""`;
+      return `this.defineReactiveProperty(this.state, "${key}", ${valueExpression});`;
+    })
     .join("\n");
-  const subscriptions = component.scriptContent.state
+  const subscriptions = Object.entries(component.scriptContent.state)
     .map(([key]) => `this.subscriptions.${key}.push(() => this.render());`)
     .join("\n");
-  const bindMethods = component.scriptContent.methods
+  const bindMethods = Object.entries(component.scriptContent.methods)
     .map(([key]) => `this.${key} = this.${key}.bind(this);`)
     .join("\n");
-  const methods = component.scriptContent.methods.map(([_, value]) => `${value};`).join("\n");
+  const methods = Object.entries(component.scriptContent.methods)
+    .map(([_, value]) => `${value};`)
+    .join("\n");
+
+  const styleContent = component.styleContent.styles
+    ? `ensureStyles() {
+    if (!document.querySelector(\`style[data-style-for="${componentName}"]\`)) {
+      const style = document.createElement("style");
+      style.setAttribute("data-style-for", "${componentName}");
+      style.textContent = \`${component.styleContent.styles}\`;
+      document.head.appendChild(style);
+    }
+  }`
+    : "";
 
   return `${component.scriptContent.imports}
-
 class ${componentName} {
   constructor(props = {}) {
     this.id = Math.random().toString(36).substring(2, 9);
@@ -43,14 +63,7 @@ class ${componentName} {
     });
   }
 
-  ensureStyles() {
-    if (!document.querySelector(\`style[data-style-for="${componentName}"]\`)) {
-      const style = document.createElement("style");
-      style.setAttribute("data-style-for", "${componentName}");
-      style.textContent = \`${component.styleContent.styles}\`;
-      document.head.appendChild(style);
-    }
-  }
+  ${styleContent}
 
   ${methods}
 
@@ -92,7 +105,7 @@ class ${componentName} {
     if (container) {
       container.appendChild(${component.container});
     } else {
-      const el = document.querySelector(\`[data-component-id="${componentName}-${this.id}"]\`);
+      const el = document.querySelector(\`[data-component-id="${componentName}-\${this.id}"]\`);
       this.updateComponent(el, ${component.container});
     }
 
