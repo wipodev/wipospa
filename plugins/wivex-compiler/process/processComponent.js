@@ -1,10 +1,9 @@
 import * as cheerio from "cheerio";
-import { headProcessor } from "./processHead.js";
-import { scriptProcessor } from "./processScripts.js";
-import { styleProcessor } from "./processStyles.js";
+import { preprocessComponent } from "../preprocess/preprocessComponent.js";
 import { elementProcessor } from "./processElement.js";
+import { createReactiveResolver, createGetName } from "../helpers/reactiveUtils.js";
 
-export default function componentProcessor(component, componentName) {
+export function componentProcessor(component, componentName) {
   const { preProcessedTemplate, scriptContent, headContent, styleContent } = preprocessComponent(component);
   const { imports, state, props } = scriptContent;
   const stateKeys = Object.keys(state);
@@ -17,6 +16,7 @@ export default function componentProcessor(component, componentName) {
 
   const rootElement = $("body").children().first();
   const container = rootElement[0].name;
+
   const resolveReactiveKey = createReactiveResolver(stateKeys, propKeys);
   const getName = createGetName(imports);
 
@@ -29,39 +29,4 @@ export default function componentProcessor(component, componentName) {
     .get()
     .join("\n");
   return { templateContent, scriptContent, headContent, styleContent, container };
-}
-
-function preprocessComponent(component) {
-  const headContent = headProcessor(component);
-  const scriptContent = scriptProcessor(component);
-  const styleContent = styleProcessor(component);
-
-  const $ = cheerio.load(component);
-  $("wivex\\:head").remove();
-  $("script").remove();
-  $("style").remove();
-  const preProcessedTemplate = $.html();
-
-  return {
-    preProcessedTemplate,
-    scriptContent,
-    headContent,
-    styleContent,
-  };
-}
-
-function createReactiveResolver(stateKeys, propKeys) {
-  return (key) => {
-    if (stateKeys.includes(key)) return `this.state.${key}`;
-    if (propKeys.includes(key)) return `this.props.${key}`;
-    return key;
-  };
-}
-
-function createGetName(imports) {
-  return (word) => {
-    const regex = new RegExp(`\\b${word}\\b`, "i");
-    const match = imports.match(regex);
-    return match ? match[0] : null;
-  };
 }

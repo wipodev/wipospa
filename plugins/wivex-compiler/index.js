@@ -1,9 +1,8 @@
-import compileComponent from "../lib2/componentCompiler.js";
+import compileComponent from "./compiler.js";
 
 export function WivexCompiler() {
   return {
-    name: "wivex-compiler",
-    apply: "serve",
+    name: "vite-plugin-wivex-compiler",
     transform(code, id) {
       if (id.endsWith(".html")) {
         const compiledCode = compileComponent(code, id);
