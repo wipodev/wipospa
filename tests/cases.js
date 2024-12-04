@@ -475,8 +475,12 @@ section.appendChild(ul0);`,
   case6: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
+    state: `this.defineReactiveProperty(this.state, "imageUrl", "https://via.placeholder.com/150");
+this.defineReactiveProperty(this.state, "imageAlt", "Imagen de ejemplo");
+this.defineReactiveProperty(this.state, "description", "Esta es una descripción de prueba");`,
+    subscriptions: `this.subscriptions.imageUrl.push(() => this.render());
+this.subscriptions.imageAlt.push(() => this.render());
+this.subscriptions.description.push(() => this.render());`,
     bindMethods: ``,
     styles: ``,
     methods: ``,
@@ -498,8 +502,10 @@ section.appendChild(p1);`,
   case7: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
+    state: `this.defineReactiveProperty(this.state, "dynamicClasses", "text-center bg-primary");
+this.defineReactiveProperty(this.state, "title", "Este es un título dinámico");`,
+    subscriptions: `this.subscriptions.dynamicClasses.push(() => this.render());
+this.subscriptions.title.push(() => this.render());`,
     bindMethods: ``,
     styles: ``,
     methods: ``,
@@ -515,8 +521,8 @@ section.appendChild(h10);`,
   case8: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
+    state: `this.defineReactiveProperty(this.state, "data", [ { id: 1, value: "Elemento 1" }, { id: 2, value: "Elemento 2" }, ]);`,
+    subscriptions: `this.subscriptions.data.push(() => this.render());`,
     bindMethods: ``,
     styles: ``,
     methods: ``,
@@ -539,11 +545,15 @@ section.appendChild(div0);
   case9: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
-    bindMethods: ``,
+    state: `this.defineReactiveProperty(this.state, "showModal", false);
+this.defineReactiveProperty(this.state, "modalContent", "Este es el contenido del modal");`,
+    subscriptions: `this.subscriptions.showModal.push(() => this.render());
+this.subscriptions.modalContent.push(() => this.render());`,
+    bindMethods: `this.toggleModal = this.toggleModal.bind(this);`,
     styles: ``,
-    methods: ``,
+    methods: `toggleModal() {
+    this.state.showModal = !this.state.showModal;
+  };`,
     container: `section`,
     templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case9-\${this.id}\`);
@@ -570,11 +580,15 @@ section.appendChild(div1);
   case10: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
-    bindMethods: ``,
+    state: `this.defineReactiveProperty(this.state, "items", ["rojo", "verde", "azul"]);
+this.defineReactiveProperty(this.state, "selectedColor", null);`,
+    subscriptions: `this.subscriptions.items.push(() => this.render());
+this.subscriptions.selectedColor.push(() => this.render());`,
+    bindMethods: `this.selectColor = this.selectColor.bind(this);`,
     styles: ``,
-    methods: ``,
+    methods: `selectColor(color) {
+    this.state.selectedColor = color;
+  };`,
     container: `section`,
     templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case10-\${this.id}\`);
@@ -599,8 +613,10 @@ section.appendChild(p1);
   case11: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
+    state: `this.defineReactiveProperty(this.state, "hasPermission", false);
+this.defineReactiveProperty(this.state, "message", hasPermission ? "Tienes permiso" : "No tienes permiso");`,
+    subscriptions: `this.subscriptions.hasPermission.push(() => this.render());
+this.subscriptions.message.push(() => this.render());`,
     bindMethods: ``,
     styles: ``,
     methods: ``,
@@ -623,8 +639,8 @@ section.appendChild(div1);
   case12: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
+    state: `this.defineReactiveProperty(this.state, "articles", [ { title: "Artículo 1", body: "Contenido del artículo 1" }, { title: "Artículo 2", body: "Contenido del artículo 2" }, ]);`,
+    subscriptions: `this.subscriptions.articles.push(() => this.render());`,
     bindMethods: ``,
     styles: ``,
     methods: ``,
@@ -647,11 +663,13 @@ section.appendChild(article0);
   case13: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
-    bindMethods: ``,
+    state: `this.defineReactiveProperty(this.state, "inputValue", "");`,
+    subscriptions: `this.subscriptions.inputValue.push(() => this.render());`,
+    bindMethods: `this.updateValue = this.updateValue.bind(this);`,
     styles: ``,
-    methods: ``,
+    methods: `updateValue(event) {
+    this.state.inputValue = event.target.value;
+  };`,
     container: `section`,
     templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case13-\${this.id}\`);
@@ -669,8 +687,8 @@ section.appendChild(p1);`,
   case14: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
+    state: `this.defineReactiveProperty(this.state, "isLoading", true);`,
+    subscriptions: `this.subscriptions.isLoading.push(() => this.render());`,
     bindMethods: ``,
     styles: ``,
     methods: ``,
@@ -697,8 +715,8 @@ section.appendChild(div1);
   case15: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
+    state: `this.defineReactiveProperty(this.state, "progress", 50);`,
+    subscriptions: `this.subscriptions.progress.push(() => this.render());`,
     bindMethods: ``,
     styles: ``,
     methods: ``,
@@ -718,8 +736,8 @@ section.appendChild(p1);`,
   case16: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
+    state: `this.defineReactiveProperty(this.state, "userProfile", { name: "Carlos", age: 30, occupation: "Desarrollador", });`,
+    subscriptions: `this.subscriptions.userProfile.push(() => this.render());`,
     bindMethods: ``,
     styles: ``,
     methods: ``,
@@ -742,8 +760,8 @@ section.appendChild(p2);`,
   case17: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
+    state: `this.defineReactiveProperty(this.state, "list", [ { id: 1, name: "Elemento A", selected: false }, { id: 2, name: "Elemento B", selected: true }, ]);`,
+    subscriptions: `this.subscriptions.list.push(() => this.render());`,
     bindMethods: ``,
     styles: ``,
     methods: ``,
@@ -770,11 +788,13 @@ section.appendChild(ul0);`,
   case18: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
-    bindMethods: ``,
+    state: `this.defineReactiveProperty(this.state, "step", 1);`,
+    subscriptions: `this.subscriptions.step.push(() => this.render());`,
+    bindMethods: `this.nextStep = this.nextStep.bind(this);`,
     styles: ``,
-    methods: ``,
+    methods: `nextStep() {
+    this.state.step++;
+  };`,
     container: `section`,
     templateContent: `const section = document.createElement("section");
 section.setAttribute("data-component-id", \`case18-\${this.id}\`);
@@ -816,11 +836,13 @@ section.appendChild(div2);
   case19: {
     imports: ``,
     props: ``,
-    state: ``,
-    subscriptions: ``,
-    bindMethods: ``,
+    state: `this.defineReactiveProperty(this.state, "count", 0);`,
+    subscriptions: `this.subscriptions.count.push(() => this.render());`,
+    bindMethods: `this.increment = this.increment.bind(this);`,
     styles: ``,
-    methods: ``,
+    methods: `increment() {
+    this.state.count++;
+  };`,
     container: `article`,
     templateContent: `const article = document.createElement("article");
 article.setAttribute("data-component-id", \`case19-\${this.id}\`);
