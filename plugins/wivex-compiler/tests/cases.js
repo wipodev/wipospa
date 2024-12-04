@@ -1,35 +1,4 @@
-export function getTestCases() {
-  const witestsCases = {};
-
-  Object.entries(testCases).forEach(([caseName, input]) => {
-    const expected = expectedOutputs[caseName];
-    if (expected !== undefined) {
-      witestsCases[caseName] = { input: [input, caseName], expected: expected.templateContent };
-    } else {
-      console.warn(`No expected output for case: ${caseName}`);
-    }
-  });
-
-  return witestsCases;
-}
-
-export function getFullTestCases() {
-  const witestsCases = {};
-
-  Object.entries(testCases).forEach(([caseName, input]) => {
-    const expected = expectedOutputs[caseName];
-    if (expected !== undefined) {
-      const fullExpected = getBase({ componentName: caseName, ...expected });
-      witestsCases[caseName] = { input: [input, caseName], expected: fullExpected };
-    } else {
-      console.warn(`No expected output for case: ${caseName}`);
-    }
-  });
-
-  return witestsCases;
-}
-
-const testCases = {
+export const testCases = {
   case1: /*html*/ `
 <section>
   <div></div>
@@ -315,7 +284,7 @@ const testCases = {
 `,
 };
 
-const expectedOutputs = {
+export const expectedOutputs = {
   case1: {
     imports: ``,
     props: ``,
@@ -865,7 +834,7 @@ article.appendChild(p2);`,
   },
 };
 
-function getBase({
+export function getBase({
   componentName,
   imports,
   props,
