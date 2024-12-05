@@ -13,3 +13,18 @@ export function createGetName(imports) {
     return match ? match[0] : null;
   };
 }
+
+export function resolvedAnidedKey(content, resolveReactiveKey) {
+  const [firstWord, ...rest] = content.trim().split(".");
+  const resolvedKey = resolveReactiveKey(firstWord);
+  return [resolvedKey, ...rest].join(".");
+}
+
+export function resolvedReactiveAttr(content, resolveReactiveKey) {
+  const resolvedContent = content.replace(/{(.*?)}/g, (_, attr) => resolvedAnidedKey(attr, resolveReactiveKey));
+  if (/^\s*{.*}\s*$/.test(content)) {
+    return resolvedContent;
+  } else {
+    return `\`${content.replace(/{(.*?)}/g, (_, attr) => `\${${resolvedAnidedKey(attr, resolveReactiveKey)}}`)}\``;
+  }
+}

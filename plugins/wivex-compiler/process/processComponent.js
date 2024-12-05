@@ -1,6 +1,7 @@
 import * as cheerio from "cheerio";
 import { preprocessComponent } from "../preprocess/preprocessComponent.js";
-import { elementProcessor } from "./processElement.js";
+//import { elementProcessor } from "./processElement.js";
+import { processElement } from "./elementProcessor.js";
 import { createReactiveResolver, createGetName } from "../helpers/reactiveUtils.js";
 
 export function componentProcessor(component, componentName) {
@@ -25,7 +26,7 @@ export function componentProcessor(component, componentName) {
 
   templateContent += rootElement
     .children()
-    .map((i, el) => elementProcessor($, el, i, container, resolveReactiveKey, getName))
+    .map((i, el) => processElement($, el, i, container, resolveReactiveKey, getName))
     .get()
     .join("\n");
   return { templateContent, scriptContent, headContent, styleContent, container };
