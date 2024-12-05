@@ -15,13 +15,13 @@ export function generateClassTemplate({
 class ${componentName} {
   constructor(props = {}) {
     this.id = Math.random().toString(36).substring(2, 9);
-    this.props = { ${props}, ...props};
+    ${props}
     this.subscriptions = {};
     this.state = {};
     ${state}
     ${subscriptions}
     ${bindMethods}
-    this.ensureStyles();
+    ${styleContent ? "this.ensureStyles();" : ""}
   }
 
   defineReactiveProperty(obj, key, initialValue) {
