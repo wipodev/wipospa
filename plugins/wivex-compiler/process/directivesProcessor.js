@@ -18,10 +18,10 @@ export function processDirectives(config) {
     if (directiveKey) {
       attributeCode += directives[directiveKey]({ ...config, value, attr });
     } else if (
-      !attributes["data-if"] &&
-      !attributes["data-for"] &&
+      !config.attributes["data-if"] &&
+      !config.attributes["data-for"] &&
       !attributeCode &&
-      !Object.keys(attributes).some((key) => key.startsWith("on"))
+      !Object.keys(config.attributes).some((key) => key.startsWith("on"))
     ) {
       attributeCode += resolveChildCreation(config);
     }
@@ -53,10 +53,10 @@ function processDirectiveFor(config) {
   return forCode;
 }
 
-function createComponentChild(config) {
+function createComponentChild(config, componentChild) {
   const props = getProps(config);
   const id = config.directive === "data-for" ? "`${id}`" : "";
-  let childCode = `  const ${config.tagName}${config.index}${id} = new ${config.componentChild}({${props}});\n`;
+  let childCode = `  const ${config.tagName}${config.index}${id} = new ${componentChild}({${props}});\n`;
   childCode += `  ${config.tagName}${config.index}${id}.mount(${config.container});\n`;
 
   return childCode;
@@ -81,6 +81,6 @@ function resolveChildCreation(config) {
   if (!componentChild) {
     return createElement(config);
   } else {
-    return createComponentChild(config);
+    return createComponentChild(config, componentChild);
   }
 }

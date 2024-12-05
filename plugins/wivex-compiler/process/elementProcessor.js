@@ -7,7 +7,15 @@ export function processElement($, el, index, container, resolveReactiveKey, getN
   if (!isElement) return "";
   const attributes = el.attribs;
   const innerHTML = $(el).html();
-  const elementCode = processDirectives(tagName, index, attributes, container, innerHTML, resolveReactiveKey, getName);
+  const elementCode = processDirectives({
+    tagName,
+    index,
+    attributes,
+    container,
+    innerHTML,
+    resolveReactiveKey,
+    getName,
+  });
 
   return elementCode;
 }

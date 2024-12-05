@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { processElement } from "./elementProcessor";
+import { processElement } from "./elementProcessor.js";
 import { resolvedAnidedKey, resolvedReactiveAttr } from "../helpers/reactiveUtils.js";
 
 export function createElement({
@@ -31,7 +31,7 @@ function processInnerHTML(tagName, index, innerHTML, resolveReactiveKey, getName
       if (el.type === "text") {
         const textContent = $(el).text().trim();
         if (textContent) {
-          innerHTMLCode += processTextContent(tagName, `${index}${i}`, textContent, resolveReactiveKey);
+          innerHTMLCode += processTextContent(tagName, index, textContent, resolveReactiveKey);
         }
       } else if (el.type === "tag") {
         innerHTMLCode += processElement($, el, `${i}${index}`, `${tagName}${index}`, resolveReactiveKey, getName);
@@ -59,7 +59,7 @@ function processTextContent(tagName, index, innerHTML, resolveReactiveKey) {
       )}\`;\n`;
     }
   } else {
-    return `${tagName}${index}.textContent = "${innerHTML}";\n`;
+    return `${tagName}${index}.textContent = \`${innerHTML}\`;\n`;
   }
 }
 
