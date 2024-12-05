@@ -42,7 +42,7 @@ export function compileComponent(sourceCode, filePath) {
   return generateClassTemplate({
     componentName,
     imports: component.scriptContent.imports,
-    props,
+    props: props ? `this.props = { ${props}, ...props };` : "this.props = props;",
     state,
     subscriptions,
     bindMethods,

@@ -11,7 +11,7 @@ export function scriptProcessor(stringCode) {
       methods: [],
     },
   };
-  const importRegex = /import\s+[^;]+;?/g;
+  const importRegex = /import\s+[^;\n]+;?/g;
   const stateRegex = /let\s+(\w+)\s*(?:=\s*([^;]+))?\s*;?/g;
   const propsRegex = /var\s+(\w+)\s*(?:=\s*([^;]+))?\s*;?/g;
   const functionRegex =
