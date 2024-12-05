@@ -1,10 +1,10 @@
 import path from "path";
-import { componentProcessor } from "./process/processComponent.js";
+import { ProcessComponent } from "./process/componentProcessor.js";
 import { generateClassTemplate } from "./template/classTemplate.js";
 
 export function compileComponent(sourceCode, filePath) {
   const componentName = path.basename(filePath, ".html").replace(/[-_]/g, "");
-  const component = componentProcessor(sourceCode, componentName);
+  const component = ProcessComponent(sourceCode, componentName);
 
   const props = Object.entries(component.scriptContent.props)
     .map(([key, value]) => {

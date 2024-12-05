@@ -1,10 +1,10 @@
 import * as cheerio from "cheerio";
-import { preprocessComponent } from "../preprocess/preprocessComponent.js";
+import { preprocessComponent } from "../preprocess/componentPreprocessor.js";
 //import { elementProcessor } from "./processElement.js";
 import { processElement } from "./elementProcessor.js";
 import { createReactiveResolver, createGetName } from "../helpers/reactiveUtils.js";
 
-export function componentProcessor(component, componentName) {
+export function ProcessComponent(component, componentName) {
   const { preProcessedTemplate, scriptContent, headContent, styleContent } = preprocessComponent(component);
   const { imports, state, props } = scriptContent;
   const stateKeys = Object.keys(state);
