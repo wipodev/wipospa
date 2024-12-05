@@ -23,7 +23,7 @@
       "import": "./dist/wivex.es.js",
       "require": "./dist/wivex.cjs.js"
     },
-    "./plugin": "./plugins/vite-plugin-wivex.js",
+    "./plugin": "./plugins/wivex-compiler/index.js",
     "./prebuild": "./prebuild/index.js"
   },
   "scripts": {
