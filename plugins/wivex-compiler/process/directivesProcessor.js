@@ -58,9 +58,8 @@ function processDirectiveFor(config) {
 
 function createComponentChild(config, componentChild) {
   const props = getProps(config);
-  const id = config.directive === "data-for" ? "`${id}`" : "";
-  let childCode = `  const ${config.tagName}${config.index}${id} = new ${componentChild}({${props}});\n`;
-  childCode += `  ${config.tagName}${config.index}${id}.mount(${config.container});\n`;
+  let childCode = `  const ${config.tagName}${config.index} = new ${componentChild}({${props}});\n`;
+  childCode += `  ${config.tagName}${config.index}.mount(${config.container});\n`;
 
   return childCode;
 }
