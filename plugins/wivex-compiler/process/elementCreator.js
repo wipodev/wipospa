@@ -11,12 +11,13 @@ export function createElement({
   resolveReactiveKey,
   getName,
   assignOn,
+  componentName,
 }) {
   let elementCode = `const ${tagName}${index} = document.createElement("${tagName}");\n`;
   elementCode += processInnerHTML(tagName, index, innerHTML, resolveReactiveKey, getName);
   elementCode += assignOn ? assignOn : "";
-  elementCode += setAttributes(attributes, tagName, index, resolveReactiveKey);
-  elementCode += `${container}.appendChild(${tagName}${index});\n`;
+  elementCode += setAttributes(attributes, tagName, index, resolveReactiveKey, container, componentName);
+  elementCode += container !== `${tagName}${index}` ? `${container}.appendChild(${tagName}${index});\n` : "";
   return elementCode;
 }
 
@@ -73,8 +74,11 @@ function processTextContent(tagName, index, innerHTML, resolveReactiveKey, subIn
   }
 }
 
-export function setAttributes(attributes, tagName, index, resolveReactiveKey) {
-  let setAttributeCode = "";
+export function setAttributes(attributes, tagName, index, resolveReactiveKey, container, componentName) {
+  let setAttributeCode =
+    container === `${tagName}${index}`
+      ? `${container}.setAttribute("data-component-id", \`${componentName}-\${this.id}\`);\n`
+      : "";
   Object.entries(attributes).forEach(([attr, value]) => {
     if (!attr.startsWith("on") && attr !== "data-for" && attr !== "data-if") {
       let newValue = `"${value}"`;
