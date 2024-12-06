@@ -11,6 +11,7 @@ export function generateClassTemplate({
   methods,
   templateContent,
   container,
+  headContent,
 }) {
   const defineReactiveProperty = state
     ? `defineReactiveProperty(obj, key, initialValue) {
@@ -135,6 +136,8 @@ class ${componentName} {
 
   ${updateComponent}
 
+  ${headContent}
+
   render(container = null) {
     ${templateContent}
 
@@ -148,7 +151,7 @@ class ${componentName} {
 
   mount(container, replace = false) {
     ${beforeMount ? `this.beforeMount();\n` : ""}if (replace && container) container.innerHTML = "";
-    this.render(container);${mounted ? `\nthis.mounted();` : ""}
+    ${headContent ? `this.renderHead();\n` : ""}this.render(container);${mounted ? `\nthis.mounted();` : ""}
   }
 
   unmount() {

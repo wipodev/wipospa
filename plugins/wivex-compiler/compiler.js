@@ -54,5 +54,6 @@ export function compileComponent(sourceCode, filePath) {
     methods,
     templateContent: component.templateContent,
     container: component.container,
+    headContent: component.headContent.headContent,
   });
 }
