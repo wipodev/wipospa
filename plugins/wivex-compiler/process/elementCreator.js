@@ -10,11 +10,11 @@ export function createElement({
   innerHTML,
   resolveReactiveKey,
   getName,
-  assingOn,
+  assignOn,
 }) {
   let elementCode = `const ${tagName}${index} = document.createElement("${tagName}");\n`;
   elementCode += processInnerHTML(tagName, index, innerHTML, resolveReactiveKey, getName);
-  elementCode += assingOn ? assingOn : "";
+  elementCode += assignOn ? assignOn : "";
   elementCode += setAttributes(attributes, tagName, index, resolveReactiveKey);
   elementCode += `${container}.appendChild(${tagName}${index});\n`;
   return elementCode;
@@ -73,7 +73,7 @@ function processTextContent(tagName, index, innerHTML, resolveReactiveKey, subIn
   }
 }
 
-function setAttributes(attributes, tagName, index, resolveReactiveKey) {
+export function setAttributes(attributes, tagName, index, resolveReactiveKey) {
   let setAttributeCode = "";
   Object.entries(attributes).forEach(([attr, value]) => {
     if (!attr.startsWith("on") && attr !== "data-for" && attr !== "data-if") {
