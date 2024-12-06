@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import { preprocessComponent } from "../preprocess/componentPreprocessor.js";
-//import { elementProcessor } from "./processElement.js";
 import { processElement } from "./elementProcessor.js";
+import { setAttributes } from "./elementCreator.js";
 import { createReactiveResolver, createGetName } from "../helpers/reactiveUtils.js";
 
 export function ProcessComponent(component, componentName) {
@@ -22,7 +22,8 @@ export function ProcessComponent(component, componentName) {
   const getName = createGetName(imports);
 
   let templateContent = `const ${container} = document.createElement("${container}");\n`;
-  templateContent += `${container}.setAttribute("data-component-id", \`${componentName}-\${this.id}\`);\n\n`;
+  templateContent += `${container}.setAttribute("data-component-id", \`${componentName}-\${this.id}\`);\n`;
+  templateContent += setAttributes(rootElement[0].attribs, container, "", resolveReactiveKey) + "\n";
 
   templateContent += rootElement
     .children()
