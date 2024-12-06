@@ -7,7 +7,7 @@ export function generateClassTemplate({
   bindMethods,
   beforeMount,
   mounted,
-  styleContent,
+  styles,
   methods,
   templateContent,
   container,
@@ -81,6 +81,28 @@ export function generateClassTemplate({
 `
     : "";
 
+  let styleContent = "";
+  let styleGlobal = true;
+  if (styles) {
+    if (styles.includes("scope")) {
+      styleContent += `scopedStyles(el) {
+        const style = document.createElement("style");
+        style.textContent = \`${styles}\`;
+        el.appendChild(style);
+      }`;
+      styleGlobal = false;
+    } else {
+      styleContent += `ensureStyles() {
+    if (!document.querySelector(\`style[data-style-for="${componentName}"]\`)) {
+      const style = document.createElement("style");
+      style.setAttribute("data-style-for", "${componentName}");
+      style.textContent = \`${styles}\`;
+      document.head.appendChild(style);
+    }
+  }`;
+    }
+  }
+
   return `${imports}
 
 class ${componentName} {
@@ -92,7 +114,7 @@ class ${componentName} {
     this.observer = null;
     ${props}${subscriptions ? "\nthis.subscriptions = {};" : ""}${
     state ? `\nthis.state = {};\n${state}` : ""
-  }${subscriptions}${bindMethods}${styleContent ? "\nthis.ensureStyles();" : ""}
+  }${subscriptions}${bindMethods}${styleContent && styleGlobal ? "\nthis.ensureStyles();" : ""}
   }
 
   ${defineReactiveProperty}
@@ -143,7 +165,7 @@ class ${componentName} {
 
     if (container) {
       container.appendChild(${container});
-      this.observeDOM(${container});
+      ${styleContent && !styleGlobal ? `this.scopedStyles(${container});\n` : ""}this.observeDOM(${container});
     } ${reRender}
 
     return ${container};

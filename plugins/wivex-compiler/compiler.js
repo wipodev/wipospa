@@ -30,17 +30,6 @@ export function compileComponent(sourceCode, filePath) {
   const beforeMount = component.scriptContent.lifecycle.beforeMount;
   const mounted = component.scriptContent.lifecycle.mounted;
 
-  const styleContent = component.styleContent.styles
-    ? `ensureStyles() {
-    if (!document.querySelector(\`style[data-style-for="${componentName}"]\`)) {
-      const style = document.createElement("style");
-      style.setAttribute("data-style-for", "${componentName}");
-      style.textContent = \`${component.styleContent.styles}\`;
-      document.head.appendChild(style);
-    }
-  }`
-    : "";
-
   return generateClassTemplate({
     componentName,
     imports: component.scriptContent.imports,
@@ -50,7 +39,7 @@ export function compileComponent(sourceCode, filePath) {
     bindMethods,
     beforeMount,
     mounted,
-    styleContent,
+    styles: component.styleContent.styles,
     methods,
     templateContent: component.templateContent,
     container: component.container,
