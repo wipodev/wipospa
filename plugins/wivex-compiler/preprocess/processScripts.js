@@ -4,11 +4,13 @@ export function scriptProcessor(stringCode) {
     state: {},
     props: {},
     methods: {},
+    lifecycle: {},
     indexes: {
       imports: {},
       state: [],
       props: [],
       methods: [],
+      lifecycle: {},
     },
   };
   const importRegex = /import\s+[^;\n]+;?/g;
@@ -16,6 +18,17 @@ export function scriptProcessor(stringCode) {
   const propsRegex = /var\s+(\w+)\s*(?:=\s*([^;]+))?\s*;?/g;
   const functionRegex =
     /function\s+(\w+)\s*\(([^)]*)\)\s*\{([\s\S]*?)\}|const\s+(\w+)\s*=\s*\(([^)]*)\)\s*=>\s*(?:\{([\s\S]*?)\}|([^;\n]+))/g;
+
+  const updateBody = (body) => {
+    return [
+      ...Object.entries(scriptContent.state).map(([key]) => [key, "this.state"]),
+      ...Object.entries(scriptContent.props).map(([key]) => [key, "this.props"]),
+      ...Object.entries(scriptContent.methods).map(([key]) => [key, "this"]),
+    ].reduce((func, [key, prefix]) => {
+      const regex = new RegExp(`(?<![-\\w])${key}\\b`, "g");
+      return func.replace(regex, `${prefix}.${key}`);
+    }, body);
+  };
 
   if (stringCode) {
     let match;
@@ -52,15 +65,7 @@ export function scriptProcessor(stringCode) {
 
       if (!name) continue;
 
-      const updatedBody = [
-        ...Object.entries(scriptContent.state).map(([key]) => [key, "state"]),
-        ...Object.entries(scriptContent.props).map(([key]) => [key, "props"]),
-      ].reduce((func, [key, prefix]) => {
-        const regex = new RegExp(`(?<![-\\w])${key}\\b`, "g");
-        return func.replace(regex, `this.${prefix}.${key}`);
-      }, body);
-
-      const classMethod = `${name}(${params}) { ${updatedBody} }`;
+      const classMethod = `${name}(${params}) { ${updateBody(body)} }`;
 
       scriptContent.methods[name] = classMethod;
       scriptContent.indexes.methods.push({
@@ -69,7 +74,59 @@ export function scriptProcessor(stringCode) {
         end: functionRegex.lastIndex,
       });
     }
+
+    const exportDefault = extractExportDefault(stringCode);
+    if (exportDefault) {
+      scriptContent.lifecycle.beforeMount = updateBody(exportDefault.lifecycle.beforeMount);
+      scriptContent.lifecycle.mounted = updateBody(exportDefault.lifecycle.mounted);
+      scriptContent.indexes.lifecycle.start = exportDefault.indexes.start;
+      scriptContent.indexes.lifecycle.end = exportDefault.indexes.end;
+    }
   }
 
   return scriptContent;
+}
+
+function extractExportDefault(content) {
+  const lifecycle = {};
+  const exported = extractLifecycle(content, "export default");
+  if (!exported) return null;
+
+  const beforeMount = extractLifecycle(content, "beforeMount");
+  if (beforeMount) {
+    lifecycle.beforeMount = beforeMount.method;
+  }
+
+  const mounted = extractLifecycle(content, "mounted");
+  if (mounted) {
+    lifecycle.mounted = mounted.method;
+  }
+
+  return {
+    lifecycle,
+    indexes: exported.indexes,
+  };
+}
+
+function extractLifecycle(content, method) {
+  const indexes = {};
+  const methodIndex = content.indexOf(method);
+  if (methodIndex === -1) return null;
+
+  let braceCount = 0;
+  let start = content.indexOf("{", methodIndex);
+  if (start === -1) return null;
+
+  for (let i = start; i < content.length; i++) {
+    if (content[i] === "{") braceCount++;
+    if (content[i] === "}") braceCount--;
+
+    if (braceCount === 0) {
+      indexes.start = methodIndex;
+      indexes.end = i + 1;
+      return { method: content.slice(methodIndex, i + 1), indexes };
+    }
+  }
+
+  return null;
 }

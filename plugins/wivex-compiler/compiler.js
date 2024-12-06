@@ -27,6 +27,8 @@ export function compileComponent(sourceCode, filePath) {
   const methods = Object.entries(component.scriptContent.methods)
     .map(([_, value]) => `${value}`)
     .join("\n");
+  const beforeMount = component.scriptContent.lifecycle.beforeMount;
+  const mounted = component.scriptContent.lifecycle.mounted;
 
   const styleContent = component.styleContent.styles
     ? `ensureStyles() {
@@ -46,6 +48,8 @@ export function compileComponent(sourceCode, filePath) {
     state,
     subscriptions,
     bindMethods,
+    beforeMount,
+    mounted,
     styleContent,
     methods,
     templateContent: component.templateContent,

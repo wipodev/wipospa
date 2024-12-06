@@ -41,7 +41,7 @@ function processDirectiveIf(config) {
 }
 
 function processDirectiveOn(config) {
-  const assignOn = `${config.tagName}${config.index}.addEventListener("${config.attr.replace(
+  const assignOn = `this.registerEventListener(${config.tagName}${config.index}, "${config.attr.replace(
     "on",
     ""
   )}", (event) => this.${config.value.includes("(") ? config.value : `${config.value}(event)`});\n`;
