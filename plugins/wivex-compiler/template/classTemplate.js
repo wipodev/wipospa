@@ -5,6 +5,8 @@ export function generateClassTemplate({
   state,
   subscriptions,
   bindMethods,
+  beforeMount,
+  mounted,
   styleContent,
   methods,
   templateContent,
@@ -63,11 +65,30 @@ export function generateClassTemplate({
     }`
     : "";
 
+  const registerEvent = templateContent.includes("registerEventListener")
+    ? `registerEventListener(element, event, callback) {
+    element.addEventListener(event, callback);
+    this.eventListeners.push({ element, event, callback });
+  }`
+    : "";
+
+  const removeEvent = templateContent.includes("registerEventListener")
+    ? `this.eventListeners.forEach(({ element, event, callback }) => {
+      element.removeEventListener(event, callback);
+    });
+    this.eventListeners = [];
+`
+    : "";
+
   return `${imports}
 
 class ${componentName} {
   constructor(props = {}) {
-    this.id = Math.random().toString(36).substring(2, 9);
+    this.id = Math.random().toString(36).substring(2, 9);${
+      beforeMount ? `\nthis.beforeMount = this.beforeMount.bind(this);` : ""
+    }${mounted ? `\nthis.mounted = this.mounted.bind(this);` : ""}this.destroy = this.destroy.bind(this);
+    this.eventListeners = [];
+    this.observer = null;
     ${props}${subscriptions ? "\nthis.subscriptions = {};" : ""}${
     state ? `\nthis.state = {};\n${state}` : ""
   }${subscriptions}${bindMethods}${styleContent ? "\nthis.ensureStyles();" : ""}
@@ -75,9 +96,42 @@ class ${componentName} {
 
   ${defineReactiveProperty}
 
-  ${styleContent}
+  observeDOM(node) {
+    this.observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.removedNodes.forEach((removedNode) => {
+          if (removedNode === node) {
+            this.destroy();
+            this.observer.disconnect();
+          }
+        })
+      });
+    });
+
+    const parent = node.parentNode;
+    if (parent) {
+      this.observer.observe(parent, { childList: true });
+    }
+  }
+
+  ${registerEvent}
+
+  ${beforeMount ? beforeMount : ""}
+
+  ${mounted ? mounted : ""}
+
+  destroy() {
+    console.log("destroy");
+    ${removeEvent}
+    const el = document.querySelector(\`[data-component-id="${componentName}-\${this.id}"]\`);
+    const style = document.querySelector(\`style[data-style-for="${componentName}"]\`);
+    if (el) el.remove();
+    if (style) style.remove();
+  }
 
   ${methods}
+  
+  ${styleContent}
 
   ${updateComponent}
 
@@ -86,16 +140,19 @@ class ${componentName} {
 
     if (container) {
       container.appendChild(${container});
+      this.observeDOM(${container});
     } ${reRender}
 
     return ${container};
   }
 
   mount(container, replace = false) {
-    if (replace && container) {
-        container.innerHTML = "";
-    }
-    this.render(container);
+    ${beforeMount ? `this.beforeMount();\n` : ""}if (replace && container) container.innerHTML = "";
+    this.render(container);${mounted ? `\nthis.mounted();` : ""}
+  }
+
+  unmount() {
+    this.destroy();
   }
 }
 
