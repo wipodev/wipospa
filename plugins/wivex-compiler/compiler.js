@@ -25,7 +25,7 @@ export function compileComponent(sourceCode, filePath) {
     .map(([key]) => `this.${key} = this.${key}.bind(this);`)
     .join("\n");
   const methods = Object.entries(component.scriptContent.methods)
-    .map(([_, value]) => `${value};`)
+    .map(([_, value]) => `${value}`)
     .join("\n");
 
   const styleContent = component.styleContent.styles
