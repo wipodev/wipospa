@@ -1,7 +1,6 @@
 import * as cheerio from "cheerio";
 import { preprocessComponent } from "../preprocess/componentPreprocessor.js";
 import { processElement } from "./elementProcessor.js";
-import { setAttributes } from "./elementCreator.js";
 import { createReactiveResolver, createGetName } from "../helpers/reactiveUtils.js";
 
 export function ProcessComponent(component, componentName) {
@@ -16,17 +15,12 @@ export function ProcessComponent(component, componentName) {
   }
 
   const rootElement = $("body").children().first();
-  const container = rootElement[0].name;
+  const container = `${rootElement[0].name}0`;
 
   const resolveReactiveKey = createReactiveResolver(stateKeys, propKeys);
   const getName = createGetName(imports);
 
-  let templateContent = `const ${container} = document.createElement("${container}");\n`;
-  templateContent += `${container}.setAttribute("data-component-id", \`${componentName}-\${this.id}\`);\n`;
-  templateContent += setAttributes(rootElement[0].attribs, container, "", resolveReactiveKey) + "\n";
-
-  templateContent += rootElement
-    .children()
+  const templateContent = rootElement
     .map((i, el) => processElement($, el, i, container, resolveReactiveKey, getName))
     .get()
     .join("\n");
