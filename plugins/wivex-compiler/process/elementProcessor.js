@@ -1,6 +1,6 @@
 import { processDirectives } from "./directivesProcessor.js";
 
-export function processElement($, el, index, container, resolveReactiveKey, getName) {
+export function processElement($, el, index, container, resolveReactiveKey, getName, componentName) {
   const tagName = el.name;
   const isElement = el.type === "tag";
 
@@ -8,6 +8,7 @@ export function processElement($, el, index, container, resolveReactiveKey, getN
   const attributes = el.attribs;
   const innerHTML = $(el).html();
   const elementCode = processDirectives({
+    componentName,
     tagName,
     index,
     attributes,
