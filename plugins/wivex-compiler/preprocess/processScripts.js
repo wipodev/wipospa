@@ -77,8 +77,10 @@ export function scriptProcessor(stringCode) {
 
     const exportDefault = extractExportDefault(stringCode);
     if (exportDefault) {
-      scriptContent.lifecycle.beforeMount = updateBody(exportDefault.lifecycle.beforeMount);
-      scriptContent.lifecycle.mounted = updateBody(exportDefault.lifecycle.mounted);
+      const beforeMount = exportDefault.lifecycle.beforeMount;
+      const mounted = exportDefault.lifecycle.mounted;
+      scriptContent.lifecycle.beforeMount = beforeMount ? updateBody(beforeMount) : "";
+      scriptContent.lifecycle.mounted = mounted ? updateBody(mounted) : "";
       scriptContent.indexes.lifecycle.start = exportDefault.indexes.start;
       scriptContent.indexes.lifecycle.end = exportDefault.indexes.end;
     }
