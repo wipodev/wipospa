@@ -4,7 +4,7 @@ export default defineConfig({
   build: {
     minify: false,
     lib: {
-      entry: "./lib/router.js",
+      entry: "./router/index.js",
       name: "wivex",
       fileName: (format) => `wivex.${format}.js`,
       formats: ["es", "cjs"],

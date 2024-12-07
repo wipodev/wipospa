@@ -14,7 +14,6 @@
     "core/",
     "dist/",
     "plugins/",
-    "prebuild/",
     "template/",
     "README.md",
     "LICENSE"
@@ -29,7 +28,6 @@
     "./prebuild": "./prebuild/index.js"
   },
   "scripts": {
-    "dev": "vite sandbox --host",
     "tests": "witests",
     "build": "vite build"
   },
