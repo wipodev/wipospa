@@ -64,3 +64,15 @@ export function ensureDirectoryExists(dir) {
   }
   return outputPath;
 }
+
+export function findFile(directories, files) {
+  for (let dir of directories) {
+    for (let file of files) {
+      const filePath = path.join(dir, file);
+      if (fs.existsSync(filePath)) {
+        return filePath;
+      }
+    }
+  }
+  throw new Error("No file found.");
+}

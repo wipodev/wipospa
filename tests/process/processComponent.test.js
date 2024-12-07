@@ -1,4 +1,4 @@
-import { componentProcessor } from "../../process/processComponent.js";
+import { ProcessComponent } from "../../core/process/componentProcessor.js";
 import { testCases, expectedOutputs } from "../cases.js";
 
 export function getTestCases() {
@@ -16,8 +16,8 @@ export function getTestCases() {
   return witestsCases;
 }
 
-function componentProcessorTest(component, componentName) {
-  return componentProcessor(component, componentName).templateContent;
+function ProcessComponentTest(component, componentName) {
+  return ProcessComponent(component, componentName).templateContent;
 }
 
-defineTestCases("processComponent", componentProcessorTest, getTestCases());
+defineTestCases("processComponent", ProcessComponentTest, getTestCases());

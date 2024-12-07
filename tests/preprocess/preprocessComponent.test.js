@@ -1,4 +1,4 @@
-import { preprocessComponent } from "../../preprocess/preprocessComponent.js";
+import { preprocessComponent } from "../../core/preprocess/componentPreprocessor.js";
 
 const component = /*html*/ `
 <script>

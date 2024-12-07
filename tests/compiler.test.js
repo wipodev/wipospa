@@ -1,4 +1,4 @@
-import { compileComponent } from "../compiler.js";
+import { compileComponent } from "wivex/core";
 import { testCases, expectedOutputs, getBase } from "./cases.js";
 
 function getFullTestCases() {

@@ -3,7 +3,7 @@
 import { program } from "commander";
 import { init } from "../commands/init.js";
 import { dev } from "../commands/dev.js";
-import { builder } from "../commands/build.js";
+import { builder } from "../commands/build/index.js";
 import { previewer } from "../commands/preview.js";
 import { deploy } from "../commands/deploy.js";
 import { getVersion } from "../commands/utils.js";

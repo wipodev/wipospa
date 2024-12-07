@@ -1,7 +1,7 @@
 import fs from "fs";
 import { build } from "vite";
-import { prebuildSpa, prebuildStatic } from "wivex/prebuild";
-import { move, getConfig } from "./utils.js";
+import { prebuildSpa } from "./spa.js";
+import { move, getConfig } from "../utils.js";
 
 export async function builder(options) {
   const config = await getConfig(options.root);
@@ -16,7 +16,7 @@ export async function builder(options) {
   };
 
   if (finalOptions.mode === "SPA") {
-    await prebuildSpa(finalOptions.root, finalOptions.buildRoot);
+    prebuildSpa(finalOptions.root, finalOptions.buildRoot);
   } else if (finalOptions.mode === "Static") {
     inputPaths = await prebuildStatic(finalOptions.root, finalOptions.buildRoot, finalOptions.base);
   }

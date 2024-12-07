@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { compileComponent } from "../plugins/wivex-compiler/compiler.js";
-import { findFile, copy, ensureDirectoryExists } from "./utils.js";
+import { compileComponent } from "wivex/core";
+import { findFile, copy, ensureDirectoryExists } from "../utils.js";
 
 /**
  * Prebuilds the Single Page Application (SPA) by copying the entry point (index.html), public folder, and assets folder.

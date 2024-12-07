@@ -1,4 +1,4 @@
-import { compileComponent } from "./compiler.js";
+import { compileComponent } from "wivex/core";
 
 export function WivexCompiler() {
   return {

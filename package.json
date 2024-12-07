@@ -11,6 +11,7 @@
   "files": [
     "bin/",
     "commands/",
+    "core/",
     "dist/",
     "plugins/",
     "prebuild/",
@@ -23,7 +24,8 @@
       "import": "./dist/wivex.es.js",
       "require": "./dist/wivex.cjs.js"
     },
-    "./plugin": "./plugins/wivex-compiler/index.js",
+    "./core": "./core/compiler.js",
+    "./plugin": "./plugins/vite-plugin-wivex-compiler.js",
     "./prebuild": "./prebuild/index.js"
   },
   "scripts": {
