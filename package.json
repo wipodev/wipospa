@@ -24,7 +24,7 @@
       "import": "./dist/wivex.es.js",
       "require": "./dist/wivex.cjs.js"
     },
-    "./core": "./core/compiler.js",
+    "./core": "./core/index.js",
     "./plugin": "./plugins/vite-plugin-wivex-compiler.js",
     "./prebuild": "./prebuild/index.js"
   },
