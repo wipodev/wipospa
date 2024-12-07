@@ -104,6 +104,7 @@ const expected = {
     console.log(this.state.count);
    }`,
     },
+    lifecycle: {},
     indexes: {
       imports: {
         start: 12,
@@ -118,11 +119,13 @@ const expected = {
         { name: "boton", start: 78, end: 88 },
       ],
       methods: [{ name: "increment", start: 170, end: 233 }],
+      lifecycle: {},
     },
   },
   headContent: {
-    headContent: `
-  <title>Home - Wivex</title>
+    headContent: `renderHead() {
+document.title = "Home - Wivex";
+}
 `,
     indexes: {
       start: 246,
