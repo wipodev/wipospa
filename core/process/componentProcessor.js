@@ -21,7 +21,7 @@ export function ProcessComponent(component, componentName) {
   const getName = createGetName(imports);
 
   const templateContent = rootElement
-    .map((i, el) => processElement($, el, i, container, resolveReactiveKey, getName))
+    .map((i, el) => processElement($, el, i, container, resolveReactiveKey, getName, componentName))
     .get()
     .join("\n");
   return { templateContent, scriptContent, headContent, styleContent, container };
