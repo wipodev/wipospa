@@ -1,15 +1,11 @@
 <script>
-  import { getState, updateState } from "wivex"
+  import TitleLib from "./Title_Lib.html";
+  import DarkToggle from "./Dark_Toggle.html";
 
-  document.querySelector("[data-btn-menu]").addEventListener("click", () => {
-    const state = getState("HeaderPage");
-    updateState("HeaderPage", { menu: state.menu === "open" ? "" : "open" });
-  });
+  let menu = "";
 
-  document.querySelector(".menu").addEventListener("click", () => {
-    const state = getState("HeaderPage");
-    updateState("HeaderPage", { menu: "" });
-  })
+  const toggleMenu = () => menu = menu === "open" ? "" : "open";
+  const closeMenu = () => menu = "";
 </script>
 
 <header>
@@ -19,8 +15,8 @@
       <TitleLib></TitleLib>
     </a>
     <nav>
-      <button aria-label="Open menu" class="btn" data-btn-menu><i class="wi wi-bars"></i></button>
-      <div class="menu {menu}">
+      <button aria-label="Open menu" class="btn" onclick="toggleMenu" data-btn-menu><i class="wi wi-bars"></i></button>
+      <div class="menu {menu}" onclick="closeMenu">
         <a href="/" aria-label="Go to the beginning">Home</a>
         <a href="/about" aria-label="Go to Contact">About</a>
         <DarkToggle></DarkToggle>
@@ -34,7 +30,7 @@
     --wipo-background-default: var(--pico-background-color);
   }
 
-  body>header {
+  body>div>header {
     --pico-block-spacing-vertical: 0;
     position: sticky;
     top: 0;

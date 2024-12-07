@@ -1,10 +1,5 @@
-import { registerComponent, Router } from "wivex";
-import { components } from "./config/defineComponents.js";
+import { Router } from "wivex";
 import { routes } from "./config/defineRoutes.js";
 
-registerComponent(components);
-const router = Router(routes);
-
-window.addEventListener("load", () => {
-  router.init();
-});
+const router = new Router(routes, true);
+router.init();

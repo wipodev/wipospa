@@ -1,11 +1,16 @@
-<HeaderPage></HeaderPage>
+<script>
+  import FooterPage from "./components/Footer_Page.html"
+  import HeaderPage from "./components/Header_Page.html"
+</script>
 
-<main class="container"></main>
-
-<FooterPage></FooterPage>
+<div>
+  <HeaderPage></HeaderPage>
+  <main class="container"></main>
+  <FooterPage></FooterPage>
+</div>
 
 <style>
-  body {
+  body>div {
     display: grid;
     min-height: 100dvh;
     grid-template-rows: auto 1fr auto;

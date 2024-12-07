@@ -1,11 +1,15 @@
+import Layout from "../app/Layout.html";
+import Home from "../app/views/Home.html";
+import About from "../app/views/About.html";
+
 export const routes = {
-  layout: "Layout",
+  layout: Layout,
   "/": {
-    component: "Home",
+    component: Home,
     selector: "main",
   },
   "/about": {
-    component: "About",
+    component: About,
     selector: "main",
   },
 };

@@ -1,24 +1,26 @@
 <script>
-  import { getState, updateState } from "wivex";
+  let theme = "sun";
 
   function toggleTheme() {
-    const state = getState("DarkToggle");
-    updateState("DarkToggle", { theme: state.theme === "sun" ? "moon" : "sun" });
-    const theme = state.theme === "sun" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
+    theme = theme === "sun" ? "moon" : "sun";
+    const themePage = theme === "sun" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", themePage);
+    localStorage.setItem("theme", themePage);
   }
 
   function loadTheme() {
-    const theme = localStorage.getItem("theme");
-    document.documentElement.setAttribute("data-theme", theme ? theme : "light");
-    document.querySelector("[data-theme-toggle]").addEventListener("click", toggleTheme);
+    const themePage = localStorage.getItem("theme");
+    document.documentElement.setAttribute("data-theme", themePage ? themePage : "light");
   }
 
-  loadTheme();
+  export default {
+    beforeMount() {
+      loadTheme();
+    }
+  }
 </script>
 
-<button aria-label="Turn dark mode on or off" class="btn" data-theme-toggle>
+<button aria-label="Turn dark mode on or off" class="btn" onclick="toggleTheme()" data-theme-toggle>
   <i class="wi wi-{theme}"></i>
   <span>Dark Mode</span>
 </button>
