@@ -4,23 +4,31 @@
 
 # W I V E X
 
-`wivex` is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With `wivex`, you can load HTML components, easily manage routes, and inject custom elements into the header of your document, `wivex` uses the power of `Vite` for the build and development process of your application, and `gh-pages` for the deployment of your project on github pages.
+`wivex` is a lightweight JavaScript library designed for fast and efficient development of dynamic web applications. With `wivex`, you can:
 
-Below is a guide to integrating `wivex` into your project, including how to create components, views, and using useful commands to develop, build, preview, and deploy your application. Below are the steps to create and organize your files, as well as the available commands.
+- Dynamically load and reuse HTML components.
+
+- Easily configure and manage client-side routes.
+
+- Seamlessly integrate custom meta tags or scripts into your document's `<head>`.
+
+- Leverage the power of `Vite` for blazing-fast builds and development.
+
+- Deploy to GitHub Pages with a single command.
 
 ## Commands available in `wivex`
 
 `wivex` includes several commands that facilitate the development and deployment flow of your project:
 
-- `wivex init`: This command initializes a new `wivex` project in the current folder. It creates the basic file and folder structure needed to get started, including the main layout, folders for views and components, and a configuration file to customize the project. It is ideal for quickly setting up the base environment for a project.
+- `wivex init`: Initialize a new `wivex` project with a pre-configured structure.
 
-- `wivex dev`: Launches a development server that allows you to see changes in real time. Ideal for working interactively on the application.
+- `wivex dev`: Start a live development server for real-time updates.
 
-- `wivex build`: Compiles and minifies JavaScript and CSS files, optimizing them for deployment.
+- `wivex build`: Compile and optimize the project for production.
 
-- `wivex preview`: Launches a server with the compiled files to perform a final review before deployment.
+- `wivex preview`: Preview the built project locally before deploying.
 
-- `wivex deploy`: Automatically deploys the project to GitHub Pages. **If you want to deploy to another service, follow the specific instructions for that service for a manual deployment.**
+- `wivex deploy`: Deploy the project to GitHub Pages.
 
 ## Installation
 
@@ -64,222 +72,164 @@ The `wivex init` command will create the following folder and file structure:
 │   │   │   ├── Header_Page.html
 │   │   │   └── Footer_Page.html
 │   │   ├── views/                  # Folder for the main views of the application
-│   │   │   ├── home.html
-│   │   │   └── contact.html
+│   │   │   ├── Home.html
+│   │   │   └── About.html
 │   │   └── Layout.html             # Main layout of the application, where views and components are integrated
 │   ├── assets/                     # Folder for CSS or SVG style files that will be processed
 │   │   └── css/
 │   │       └── styles.css
 │   ├── config/                     # Folder for application configuration files
-│   │   ├── defineComponents.js/    # Configuration file to define the project components.
-│   │   └── defineRoutes.js/        # Configuration file to define the project paths.
+│   │   └── defineRoutes.js         # Configuration file to define the project paths.
 │   └── app.js                      # Application entry point
 ├── .gitignore
 ├── index.html                      # Main entry page for your project.
-└── wivex.config.js                # Configuration file for wivex.
+└── wivex.config.js                 # Configuration file for wivex.
 
 ```
 
-## Usage
+## Component Structure in Wivex
 
-### 1. **Creating and Using a Layout**
+In Wivex, a component is an `.html` file that follows specific rules to function correctly. Below is a detailed explanation of these rules and how to structure a component:
 
-The `layout.html` file acts as the main container for your application. Here you can load components and organize your application's structure.
+### Component Sections
 
-`Layout.html` example:
+A component can include the following sections:
+
+1. `script` (Optional): Contains the component's logic.
+
+2. `style` (Optional): Defines the component's styles.
+
+3. `wivex:head` (Optional): Includes meta information for the `<head>` of the document.
+
+4. `HTML Structure` (Required): Defines the visual content of the component.
+
+### General Rules
+
+1. Single root element: The HTML structure must be wrapped in a single root element. Multiple root elements will result in an error.
+
+2. File extension: The component file must have the `.html` extension.
+
+### Rules by Section
+
+#### 1. `script`
+
+- Structure: Must be enclosed in `<script></script>` tags.
+
+- Variables:
+
+  - `let`: Declared at the root of the script, they are treated as reactive states within the component.
+
+  - `var`: Declared at the root of the script, they are treated as properties that can be passed via HTML attributes.
+
+- Functions: Declared at the root of the script, they are treated as reactive methods of the component.
+
+- Lifecycle Hooks: To run code before or after the component is mounted, export an object with the following structure:
 
 ```html
-<HeaderPage></HeaderPage>
+<script>
+  export default {
+    beforeMount() {
+      // Code to execute before mounting
+      console.log("Preparing to mount the component.");
+    },
+    mount() {
+      // Code to execute after mounting
+      console.log("Component has been mounted.");
+    },
+  };
+</script>
+```
 
-<main class="container"></main>
+#### 2. `style`
 
-<FooterPage></FooterPage>
+- Structure: Must be enclosed in `<style></style>` tags.
 
-<style>
-  body {
-    display: grid;
-    min-height: 100dvh;
-    grid-template-rows: auto 1fr auto;
-  }
+- CSS Support: Only standard CSS is supported.
 
-  @media (max-width: 768px) {
-    .container {
-      max-width: 100%;
-      padding-inline: 0;
-    }
-  }
+- Scoped Styles: Add the `scoped` attribute to apply styles only to the component.
 
-  @media (min-width: 1536px) {
-    .container {
-      max-width: 1200px;
-    }
+```html
+<style scoped>
+  section {
+    max-width: 1200px;
   }
 </style>
 ```
 
-### 2. **Creating and Using Views**
+#### 3. `wivex:head`
 
-A view represents a specific page or section of your application, such as `home.html`.
+- Structure: Must be enclosed in `<wivex:head></wivex:head>` tags.
 
-Example of `home.html`:
+- Purpose: Includes meta information such as the page title or meta tags for the `<head>` section.
 
 ```html
 <wivex:head>
-  <title>wivex - JavaScript library for dynamic loading of HTML components</title>
-  <meta
-    name="description"
-    content="wivex is a JavaScript library that allows dynamic loading of HTML components and makes it easy to create routes in web applications. With wivex, you can load HTML components asynchronously, manage routes in a simple way, and inject custom elements into the head of your document."
-  />
+  <title>Component Title</title>
+</wivex:head>
+```
+
+#### 4. HTML Structure
+
+- Single Root Element: The HTML structure must be wrapped in one root element, such as `<div>` or `<section>`.
+
+- Directives: Wivex provides several built-in directives to simplify web application development:
+
+  - `data-if`: Conditionally displays an element based on a condition.
+
+  ```html
+  <p data-if="count > 0">Count: {count}</p>
+  ```
+
+  - `data-for`: Loops through arrays to generate elements.
+
+  ```html
+  <li data-for="item in items">{item}</li>
+  ```
+
+  - `on*`: Binds an event to a function.
+
+  ```html
+  <button onclick="increment()">Click me</button>
+  ```
+
+- Nested Components: You can import and use components within other components
+
+```html
+<script>
+  import ChildComponent from "./Child.html";
+</script>
+
+<ChildComponent />
+```
+
+### Component Example
+
+```html
+<script>
+  import Child from "./Child.html";
+  var title = "Parent Component";
+  let count = 0;
+
+  function increment() {
+    count++;
+    console.log(count);
+  }
+</script>
+
+<wivex:head>
+  <title>Parent Component</title>
 </wivex:head>
 
 <section>
-  <img src="/assets/img/logo.svg" alt="logo" />
-  <h1>Welcome to Your <TitleLib></TitleLib> App</h1>
-  <p>
-    With <strong>wivex</strong>, you can load HTML components asynchronously, manage routes in a simple way, and inject
-    custom elements into the head of your document.
-  </p>
-  <p>
-    For a basic guide on how to use <strong>wivex</strong>, see the
-    <a href="https://github.com/wipodev/wivex">readme</a> on github.
-  </p>
+  <h1>{title}</h1>
+  <button onclick="increment()">Increment</button>
+  <p data-if="count > 0">Count: {count}</p>
+  <Child data-for="name in ['Alice', 'Bob']" title="{name}" />
 </section>
 
-<style>
-  section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    padding-inline: var(--pico-spacing);
-
-    section img {
-      width: 30%;
-      height: auto;
-    }
-
-    h1 {
-      display: flex;
-      gap: 0.5rem;
-      align-items: baseline;
-
-      span[data-title-lib] {
-        font-size: inherit;
-      }
-    }
-
-    p {
-      text-align: center;
-    }
-  }
-</style>
-```
-
-### 3. **Creating and Using Components**
-
-Components are reusable pieces of the user interface that you can load into different views or layouts. Here's an example of a component called `Header_Page.html` that includes a navigation menu and a theme switcher.
-
-`Header_Page.html` example:
-
-```html
-<script>
-  import { getState, updateState } from "wivex";
-
-  document.querySelector("[data-btn-menu]").addEventListener("click", () => {
-    const state = getState("HeaderPage");
-    updateState("HeaderPage", { menu: state.menu === "open" ? "" : "open" });
-  });
-
-  document.querySelector(".menu").addEventListener("click", () => {
-    const state = getState("HeaderPage");
-    updateState("HeaderPage", { menu: "" });
-  });
-</script>
-
-<header>
-  <div class="container">
-    <a href="/" aria-label="Go to the beginning">
-      <img src="/assets/img/logo.png" alt="Logo" />
-      <TitleLib></TitleLib>
-    </a>
-    <nav>
-      <button aria-label="Open menu" class="btn" data-btn-menu><i class="wi wi-bars"></i></button>
-      <div class="menu {menu}">
-        <a href="/" aria-label="Go to the beginning">Inicio</a>
-        <a href="/about" aria-label="Go to Contact">About</a>
-        <DarkToggle></DarkToggle>
-      </div>
-    </nav>
-  </div>
-</header>
-
-<style>
-  body > header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-color: var(--header-bg-color);
-  }
-   {
-    ....;
-  }
-</style>
-```
-
-## They are all components
-
-In wivex everything can be a component and you can integrate any component into any other component, view or layout.
-
-### child component:
-
-```html
-<!--DarkToggle-->
-<script>
-  import { getState, updateState } from "wivex";
-
-  function toggleTheme() {
-    updateState("DarkToggle", { theme: state.theme === "sun" ? "moon" : "sun" });
-  }
-
-  document.querySelector("[data-theme-toggle]").addEventListener("click", toggleTheme);
-</script>
-<button aria-label="Turn dark mode on or off" class="btn" data-theme-toggle>
-  <i class="wi wi-{theme}"></i>
-  <span>Dark Mode</span>
-</button>
-```
-
-### parent component:
-
-```html
-<!--HeaderPage-->
-<header>
-  <div class="container">
-    <nav>
-      <a href="/" aria-label="Go to the beginning">Inicio</a>
-      <a href="/about" aria-label="Go to Contact">About</a>
-      <DarkToggle></DarkToggle>
-      <!--way to insert a component-->
-    </nav>
-  </div>
-</header>
-```
-
-## component styles
-
-Styles are global by default, meaning they can affect any other component. If you want to change this behavior so that the styles only affect the component you are creating, you must place the "escoped" attribute in the style tag of the component.
-
-```css
 <style scoped>
-  footer {
-    background-color: var(--pico-background-color);
-    padding: 0 0 1rem;
-    text-align: center;
-
-    hr {
-      margin-block: 0 0.5rem;
-    }
+  section {
+    max-width: 800px;
   }
 </style>
 ```
