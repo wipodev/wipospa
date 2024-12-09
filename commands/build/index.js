@@ -2,7 +2,7 @@ import fs from "fs";
 import { build } from "vite";
 import { prebuildSpa } from "./spa.js";
 import { prebuildStatic } from "./static.js";
-import { dev } from "./dev.js";
+import { dev } from "../dev.js";
 import { move, getConfig } from "../utils.js";
 
 export async function builder(options) {
