@@ -1,6 +1,8 @@
 import fs from "fs";
 import { build } from "vite";
 import { prebuildSpa } from "./spa.js";
+import { prebuildStatic } from "./static.js";
+import { dev } from "./dev.js";
 import { move, getConfig } from "../utils.js";
 
 export async function builder(options) {
@@ -18,7 +20,9 @@ export async function builder(options) {
   if (finalOptions.mode === "SPA") {
     prebuildSpa(finalOptions.root, finalOptions.buildRoot);
   } else if (finalOptions.mode === "Static") {
-    inputPaths = await prebuildStatic(finalOptions.root, finalOptions.buildRoot, finalOptions.base);
+    const server = await dev({ root: finalOptions.root, port: 3000 });
+    inputPaths = await prebuildStatic(finalOptions.root, finalOptions.buildRoot, `http://localhost:3000`);
+    await server.close();
   }
 
   try {
