@@ -24,6 +24,7 @@ program
   .description("Start the development server")
   .option("-r, --root <root>", "Root directory for the project")
   .option("-p, --port <port>", "Port for the development server")
+  .option("-v, --verbose", "Enable verbose logging", true)
   .action((options) => dev(options));
 
 program

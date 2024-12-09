@@ -8,30 +8,31 @@ export async function dev(options) {
   const finalOptions = {
     root: options.root || config.root || "./",
     port: options.port || config.port || 3000,
+    verbose: options.verbose || config.verbose || false,
   };
 
   try {
     const server = await createServer({
       root: finalOptions.root,
       plugins: [WivexCompiler()],
-      resolve: {
-        alias: {
-          "@components": `${finalOptions.root}/src/app/components/`,
-        },
-      },
       server: {
         port: finalOptions.port,
       },
     });
 
     await server.listen();
-    server.printUrls();
 
-    process.on("SIGINT", async () => {
-      console.log("\nClosing development server...");
-      await server.close();
-      process.exit(0);
-    });
+    if (finalOptions.verbose) {
+      server.printUrls();
+
+      process.on("SIGINT", async () => {
+        console.log("\nClosing development server...");
+        await server.close();
+        process.exit(0);
+      });
+    }
+
+    return server;
   } catch (error) {
     console.error("Error starting Vite server:", error);
   }
